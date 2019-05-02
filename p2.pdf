@@ -1,0 +1,386 @@
+<!DOCTYPE html>
+<!-- saved from url=(0126)chrome-extension://oemmndcbldboiebfnladdacbdfmadadm/https://fenix.tecnico.ulisboa.pt/downloadFile/1689468335624288/p2_v1.1.pdf -->
+<html dir="ltr" mozdisallowselectionprint=""><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <meta name="google" content="notranslate">
+    <title>p2.dvi - p2_v1.1.pdf</title>
+
+<!-- This snippet is used in the Chromium extension (included from viewer.html) -->
+<!--<base href="/content/web/">--><base href=".">
+<link rel="resource" type="application/l10n" href="chrome-extension://oemmndcbldboiebfnladdacbdfmadadm/content/web/locale/locale.properties">
+<script src="chrome-extension://oemmndcbldboiebfnladdacbdfmadadm/content/build/pdf.js"></script>
+
+
+    <link rel="stylesheet" href="chrome-extension://oemmndcbldboiebfnladdacbdfmadadm/content/web/viewer.css">
+
+
+
+    <script src="chrome-extension://oemmndcbldboiebfnladdacbdfmadadm/content/web/viewer.js"></script>
+
+  </head>
+
+  <body tabindex="1" class="">
+    <div id="outerContainer">
+
+      <div id="sidebarContainer">
+        <div id="toolbarSidebar">
+          <div class="splitToolbarButton toggled">
+            <button id="viewThumbnail" class="toolbarButton toggled" title="Show Thumbnails" tabindex="2" data-l10n-id="thumbs">
+               <span data-l10n-id="thumbs_label">Thumbnails</span>
+            </button>
+            <button id="viewOutline" class="toolbarButton" title="Show Document Outline (double-click to expand/collapse all items)" tabindex="3" data-l10n-id="document_outline" disabled="">
+               <span data-l10n-id="document_outline_label">Document Outline</span>
+            </button>
+            <button id="viewAttachments" class="toolbarButton" title="Show Attachments" tabindex="4" data-l10n-id="attachments" disabled="">
+               <span data-l10n-id="attachments_label">Attachments</span>
+            </button>
+          </div>
+        </div>
+        <div id="sidebarContent">
+          <div id="thumbnailView"><a href="chrome-extension://oemmndcbldboiebfnladdacbdfmadadm/https://fenix.tecnico.ulisboa.pt/downloadFile/1689468335624288/p2_v1.1.pdf#page=1" title="Page 1"><div class="thumbnail selected" data-page-number="1"><div class="thumbnailSelectionRing" style="width: 100px; height: 128px;"></div></div></a><a href="chrome-extension://oemmndcbldboiebfnladdacbdfmadadm/https://fenix.tecnico.ulisboa.pt/downloadFile/1689468335624288/p2_v1.1.pdf#page=2" title="Page 2"><div class="thumbnail" data-page-number="2"><div class="thumbnailSelectionRing" style="width: 100px; height: 128px;"></div></div></a><a href="chrome-extension://oemmndcbldboiebfnladdacbdfmadadm/https://fenix.tecnico.ulisboa.pt/downloadFile/1689468335624288/p2_v1.1.pdf#page=3" title="Page 3"><div class="thumbnail" data-page-number="3"><div class="thumbnailSelectionRing" style="width: 100px; height: 128px;"></div></div></a><a href="chrome-extension://oemmndcbldboiebfnladdacbdfmadadm/https://fenix.tecnico.ulisboa.pt/downloadFile/1689468335624288/p2_v1.1.pdf#page=4" title="Page 4"><div class="thumbnail" data-page-number="4"><div class="thumbnailSelectionRing" style="width: 100px; height: 128px;"></div></div></a><a href="chrome-extension://oemmndcbldboiebfnladdacbdfmadadm/https://fenix.tecnico.ulisboa.pt/downloadFile/1689468335624288/p2_v1.1.pdf#page=5" title="Page 5"><div class="thumbnail" data-page-number="5"><div class="thumbnailSelectionRing" style="width: 100px; height: 128px;"></div></div></a><a href="chrome-extension://oemmndcbldboiebfnladdacbdfmadadm/https://fenix.tecnico.ulisboa.pt/downloadFile/1689468335624288/p2_v1.1.pdf#page=6" title="Page 6"><div class="thumbnail" data-page-number="6"><div class="thumbnailSelectionRing" style="width: 100px; height: 128px;"></div></div></a><a href="chrome-extension://oemmndcbldboiebfnladdacbdfmadadm/https://fenix.tecnico.ulisboa.pt/downloadFile/1689468335624288/p2_v1.1.pdf#page=7" title="Page 7"><div class="thumbnail" data-page-number="7"><div class="thumbnailSelectionRing" style="width: 100px; height: 128px;"></div></div></a></div>
+          <div id="outlineView" class="hidden"></div>
+          <div id="attachmentsView" class="hidden"></div>
+        </div>
+        <div id="sidebarResizer" class=""></div>
+      </div>  <!-- sidebarContainer -->
+
+      <div id="mainContainer">
+        <div class="findbar hidden doorHanger" id="findbar">
+          <div id="findbarInputContainer">
+            <input id="findInput" class="toolbarField" title="Find" placeholder="Find in document…" tabindex="91" data-l10n-id="find_input">
+            <div class="splitToolbarButton">
+              <button id="findPrevious" class="toolbarButton findPrevious" title="Find the previous occurrence of the phrase" tabindex="92" data-l10n-id="find_previous">
+                <span data-l10n-id="find_previous_label">Previous</span>
+              </button>
+              <div class="splitToolbarButtonSeparator"></div>
+              <button id="findNext" class="toolbarButton findNext" title="Find the next occurrence of the phrase" tabindex="93" data-l10n-id="find_next">
+                <span data-l10n-id="find_next_label">Next</span>
+              </button>
+            </div>
+          </div>
+
+          <div id="findbarOptionsContainer">
+            <input type="checkbox" id="findHighlightAll" class="toolbarField" tabindex="94">
+            <label for="findHighlightAll" class="toolbarLabel" data-l10n-id="find_highlight">Highlight all</label>
+            <input type="checkbox" id="findMatchCase" class="toolbarField" tabindex="95">
+            <label for="findMatchCase" class="toolbarLabel" data-l10n-id="find_match_case_label">Match case</label>
+            <span id="findResultsCount" class="toolbarLabel hidden"></span>
+          </div>
+
+          <div id="findbarMessageContainer">
+            <span id="findMsg" class="toolbarLabel"></span>
+          </div>
+        </div>  <!-- findbar -->
+
+        <div id="secondaryToolbar" class="secondaryToolbar hidden doorHangerRight">
+          <div id="secondaryToolbarButtonContainer">
+            <button id="secondaryPresentationMode" class="secondaryToolbarButton presentationMode visibleLargeView" title="Switch to Presentation Mode" tabindex="51" data-l10n-id="presentation_mode">
+              <span data-l10n-id="presentation_mode_label">Presentation Mode</span>
+            </button>
+
+            <button id="secondaryOpenFile" class="secondaryToolbarButton openFile visibleLargeView" title="Open File" tabindex="52" data-l10n-id="open_file" hidden="true">
+              <span data-l10n-id="open_file_label">Open</span>
+            </button>
+
+            <button id="secondaryPrint" class="secondaryToolbarButton print visibleMediumView" title="Print" tabindex="53" data-l10n-id="print">
+              <span data-l10n-id="print_label">Print</span>
+            </button>
+
+            <button id="secondaryDownload" class="secondaryToolbarButton download visibleMediumView" title="Download" tabindex="54" data-l10n-id="download">
+              <span data-l10n-id="download_label">Download</span>
+            </button>
+
+            <a href="chrome-extension://oemmndcbldboiebfnladdacbdfmadadm/https://fenix.tecnico.ulisboa.pt/downloadFile/1689468335624288/p2_v1.1.pdf#page=1&amp;zoom=auto,-263,665" id="secondaryViewBookmark" class="secondaryToolbarButton bookmark visibleSmallView" title="Current view (copy or open in new window)" tabindex="55" data-l10n-id="bookmark">
+              <span data-l10n-id="bookmark_label">Current View</span>
+            </a>
+
+            <div class="horizontalToolbarSeparator visibleLargeView"></div>
+
+            <button id="firstPage" class="secondaryToolbarButton firstPage" title="Go to First Page" tabindex="56" data-l10n-id="first_page" disabled="">
+              <span data-l10n-id="first_page_label">Go to First Page</span>
+            </button>
+            <button id="lastPage" class="secondaryToolbarButton lastPage" title="Go to Last Page" tabindex="57" data-l10n-id="last_page">
+              <span data-l10n-id="last_page_label">Go to Last Page</span>
+            </button>
+
+            <div class="horizontalToolbarSeparator"></div>
+
+            <button id="pageRotateCw" class="secondaryToolbarButton rotateCw" title="Rotate Clockwise" tabindex="58" data-l10n-id="page_rotate_cw">
+              <span data-l10n-id="page_rotate_cw_label">Rotate Clockwise</span>
+            </button>
+            <button id="pageRotateCcw" class="secondaryToolbarButton rotateCcw" title="Rotate Counterclockwise" tabindex="59" data-l10n-id="page_rotate_ccw">
+              <span data-l10n-id="page_rotate_ccw_label">Rotate Counterclockwise</span>
+            </button>
+
+            <div class="horizontalToolbarSeparator"></div>
+
+            <button id="cursorSelectTool" class="secondaryToolbarButton selectTool toggled" title="Enable Text Selection Tool" tabindex="60" data-l10n-id="cursor_text_select_tool">
+              <span data-l10n-id="cursor_text_select_tool_label">Text Selection Tool</span>
+            </button>
+            <button id="cursorHandTool" class="secondaryToolbarButton handTool" title="Enable Hand Tool" tabindex="61" data-l10n-id="cursor_hand_tool">
+              <span data-l10n-id="cursor_hand_tool_label">Hand Tool</span>
+            </button>
+
+            <div class="horizontalToolbarSeparator"></div>
+
+            <button id="scrollVertical" class="secondaryToolbarButton scrollModeButtons scrollVertical toggled" title="Use Vertical Scrolling" tabindex="62" data-l10n-id="scroll_vertical">
+              <span data-l10n-id="scroll_vertical_label">Vertical Scrolling</span>
+            </button>
+            <button id="scrollHorizontal" class="secondaryToolbarButton scrollModeButtons scrollHorizontal" title="Use Horizontal Scrolling" tabindex="63" data-l10n-id="scroll_horizontal">
+              <span data-l10n-id="scroll_horizontal_label">Horizontal Scrolling</span>
+            </button>
+            <button id="scrollWrapped" class="secondaryToolbarButton scrollModeButtons scrollWrapped" title="Use Wrapped Scrolling" tabindex="64" data-l10n-id="scroll_wrapped">
+              <span data-l10n-id="scroll_wrapped_label">Wrapped Scrolling</span>
+            </button>
+
+            <div class="horizontalToolbarSeparator scrollModeButtons"></div>
+
+            <button id="spreadNone" class="secondaryToolbarButton spreadModeButtons spreadNone toggled" title="Do not join page spreads" tabindex="65" data-l10n-id="spread_none">
+              <span data-l10n-id="spread_none_label">No Spreads</span>
+            </button>
+            <button id="spreadOdd" class="secondaryToolbarButton spreadModeButtons spreadOdd" title="Join page spreads starting with odd-numbered pages" tabindex="66" data-l10n-id="spread_odd">
+              <span data-l10n-id="spread_odd_label">Odd Spreads</span>
+            </button>
+            <button id="spreadEven" class="secondaryToolbarButton spreadModeButtons spreadEven" title="Join page spreads starting with even-numbered pages" tabindex="67" data-l10n-id="spread_even">
+              <span data-l10n-id="spread_even_label">Even Spreads</span>
+            </button>
+
+            <div class="horizontalToolbarSeparator spreadModeButtons"></div>
+
+            <button id="documentProperties" class="secondaryToolbarButton documentProperties" title="Document Properties…" tabindex="68" data-l10n-id="document_properties">
+              <span data-l10n-id="document_properties_label">Document Properties…</span>
+            </button>
+          </div>
+        </div>  <!-- secondaryToolbar -->
+
+        <div class="toolbar">
+          <div id="toolbarContainer">
+            <div id="toolbarViewer">
+              <div id="toolbarViewerLeft">
+                <button id="sidebarToggle" class="toolbarButton" title="Toggle Sidebar" tabindex="11" data-l10n-id="toggle_sidebar">
+                  <span data-l10n-id="toggle_sidebar_label">Toggle Sidebar</span>
+                </button>
+                <div class="toolbarButtonSpacer"></div>
+                <button id="viewFind" class="toolbarButton" title="Find in Document" tabindex="12" data-l10n-id="findbar">
+                  <span data-l10n-id="findbar_label">Find</span>
+                </button>
+                <div class="splitToolbarButton hiddenSmallView">
+                  <button class="toolbarButton pageUp" title="Previous Page" id="previous" tabindex="13" data-l10n-id="previous" disabled="">
+                    <span data-l10n-id="previous_label">Previous</span>
+                  </button>
+                  <div class="splitToolbarButtonSeparator"></div>
+                  <button class="toolbarButton pageDown" title="Next Page" id="next" tabindex="14" data-l10n-id="next">
+                    <span data-l10n-id="next_label">Next</span>
+                  </button>
+                </div>
+                <input type="number" id="pageNumber" class="toolbarField pageNumber" title="Page" value="1" size="4" min="1" tabindex="15" data-l10n-id="page" max="7">
+                <span id="numPages" class="toolbarLabel">of 7</span>
+              </div>
+              <div id="toolbarViewerRight">
+                <button id="presentationMode" class="toolbarButton presentationMode hiddenLargeView" title="Switch to Presentation Mode" tabindex="31" data-l10n-id="presentation_mode">
+                  <span data-l10n-id="presentation_mode_label">Presentation Mode</span>
+                </button>
+
+                <button id="openFile" class="toolbarButton openFile hiddenLargeView" title="Open File" tabindex="32" data-l10n-id="open_file" hidden="true">
+                  <span data-l10n-id="open_file_label">Open</span>
+                </button>
+
+                <button id="print" class="toolbarButton print hiddenMediumView" title="Print" tabindex="33" data-l10n-id="print">
+                  <span data-l10n-id="print_label">Print</span>
+                </button>
+
+                <button id="download" class="toolbarButton download hiddenMediumView" title="Download" tabindex="34" data-l10n-id="download">
+                  <span data-l10n-id="download_label">Download</span>
+                </button>
+                <a href="chrome-extension://oemmndcbldboiebfnladdacbdfmadadm/https://fenix.tecnico.ulisboa.pt/downloadFile/1689468335624288/p2_v1.1.pdf#page=1&amp;zoom=auto,-263,665" id="viewBookmark" class="toolbarButton bookmark hiddenSmallView" title="Current view (copy or open in new window)" tabindex="35" data-l10n-id="bookmark">
+                  <span data-l10n-id="bookmark_label">Current View</span>
+                </a>
+
+                <div class="verticalToolbarSeparator hiddenSmallView"></div>
+
+                <button id="secondaryToolbarToggle" class="toolbarButton" title="Tools" tabindex="36" data-l10n-id="tools">
+                  <span data-l10n-id="tools_label">Tools</span>
+                </button>
+              </div>
+              <div id="toolbarViewerMiddle">
+                <div class="splitToolbarButton">
+                  <button id="zoomOut" class="toolbarButton zoomOut" title="Zoom Out" tabindex="21" data-l10n-id="zoom_out">
+                    <span data-l10n-id="zoom_out_label">Zoom Out</span>
+                  </button>
+                  <div class="splitToolbarButtonSeparator"></div>
+                  <button id="zoomIn" class="toolbarButton zoomIn" title="Zoom In" tabindex="22" data-l10n-id="zoom_in">
+                    <span data-l10n-id="zoom_in_label">Zoom In</span>
+                   </button>
+                </div>
+                <span id="scaleSelectContainer" class="dropdownToolbarButton" style="min-width: 120px; max-width: 120px;">
+                  <select id="scaleSelect" title="Zoom" tabindex="23" data-l10n-id="zoom" style="min-width: 142px;">
+                    <option id="pageAutoOption" title="" value="auto" selected="selected" data-l10n-id="page_scale_auto">Automatic Zoom</option>
+                    <option id="pageActualOption" title="" value="page-actual" data-l10n-id="page_scale_actual">Actual Size</option>
+                    <option id="pageFitOption" title="" value="page-fit" data-l10n-id="page_scale_fit">Page Fit</option>
+                    <option id="pageWidthOption" title="" value="page-width" data-l10n-id="page_scale_width">Page Width</option>
+                    <option id="customScaleOption" title="" value="custom" disabled="disabled" hidden="true"></option>
+                    <option title="" value="0.5" data-l10n-id="page_scale_percent" data-l10n-args="{ &quot;scale&quot;: 50 }">50%</option>
+                    <option title="" value="0.75" data-l10n-id="page_scale_percent" data-l10n-args="{ &quot;scale&quot;: 75 }">75%</option>
+                    <option title="" value="1" data-l10n-id="page_scale_percent" data-l10n-args="{ &quot;scale&quot;: 100 }">100%</option>
+                    <option title="" value="1.25" data-l10n-id="page_scale_percent" data-l10n-args="{ &quot;scale&quot;: 125 }">125%</option>
+                    <option title="" value="1.5" data-l10n-id="page_scale_percent" data-l10n-args="{ &quot;scale&quot;: 150 }">150%</option>
+                    <option title="" value="2" data-l10n-id="page_scale_percent" data-l10n-args="{ &quot;scale&quot;: 200 }">200%</option>
+                    <option title="" value="3" data-l10n-id="page_scale_percent" data-l10n-args="{ &quot;scale&quot;: 300 }">300%</option>
+                    <option title="" value="4" data-l10n-id="page_scale_percent" data-l10n-args="{ &quot;scale&quot;: 400 }">400%</option>
+                  </select>
+                </span>
+              </div>
+            </div>
+            <div id="loadingBar" class="hidden" style="width: calc(100% - 15px);">
+              <div class="progress" style="height: 100%; width: 100%;">
+                <div class="glimmer">
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <menu type="context" id="viewerContextMenu">
+          <menuitem id="contextFirstPage" label="First Page" data-l10n-id="first_page" title="Go to First Page"></menuitem>
+          <menuitem id="contextLastPage" label="Last Page" data-l10n-id="last_page" title="Go to Last Page"></menuitem>
+          <menuitem id="contextPageRotateCw" label="Rotate Clockwise" data-l10n-id="page_rotate_cw" title="Rotate Clockwise"></menuitem>
+          <menuitem id="contextPageRotateCcw" label="Rotate Counter-Clockwise" data-l10n-id="page_rotate_ccw" title="Rotate Counterclockwise"></menuitem>
+        </menu>
+
+        <div id="viewerContainer" tabindex="0">
+          <div id="viewer" class="pdfViewer"><div class="page" data-page-number="1" style="width: 1019px; height: 1319px;" data-loaded="true"><div class="canvasWrapper" style="width: 1019px; height: 1319px;"><canvas id="page1" width="1020" height="1320" style="width: 1020px; height: 1320px;"></canvas></div><div class="textLayer" style="width: 1019px; height: 1319px;"><div style="left: 346.8px; top: 255.71980333333335px; font-size: 23.91033333333333px; font-family: sans-serif;">I</div><div style="left: 356px; top: 259.976px; font-size: 19.1283px; font-family: sans-serif; transform: scaleX(1.06312);">NSTITUTO</div><div style="left: 464.60020000000003px; top: 255.71980333333335px; font-size: 23.91033333333333px; font-family: sans-serif;">S</div><div style="left: 479px; top: 259.976px; font-size: 19.1283px; font-family: sans-serif; transform: scaleX(1.02223);">UPERIOR</div><div style="left: 575.2004333333333px; top: 255.71980333333335px; font-size: 23.91033333333333px; font-family: sans-serif;">T</div><div style="left: 591.001px; top: 259.976px; font-size: 19.1283px; font-family: sans-serif; transform: scaleX(1.03877);">ÉCNICO</div><div style="left: 285.399px; top: 287.951px; font-size: 34.4377px; font-family: sans-serif; transform: scaleX(0.909602);">Análise e Síntese de Algoritmos</div><div style="left: 433.799px; top: 329.35px; font-size: 34.4377px; font-family: sans-serif; transform: scaleX(0.904657);">2018/2019</div><div style="left: 443.39885px; top: 394.26398999999975px; font-size: 28.69233333333333px; font-family: sans-serif;">2</div><div style="left: 457.79923333333323px; top: 391.6662366666665px; font-size: 19.92533333333333px; font-family: sans-serif;">o</div><div style="left: 475.8px; top: 394.264px; font-size: 28.6923px; font-family: sans-serif; transform: scaleX(0.912209);">Projecto</div><div style="left: 293px; top: 445.319px; font-size: 23.9103px; font-family: sans-serif; transform: scaleX(0.917488);">Data Limite de Entrega: 11 de Maio de 2019</div><div style="left: 129.4px; top: 585.342px; font-size: 28.6923px; font-family: sans-serif; transform: scaleX(0.951149);">Descrição do Problema</div><div style="left: 129.4px; top: 632.867px; font-size: 19.9253px; font-family: sans-serif; transform: scaleX(0.936381);">O Sr. Caracol está num estado de euforia porque acabou de assi</div><div style="left: 666.2px; top: 632.867px; font-size: 19.9253px; font-family: sans-serif; transform: scaleX(0.933632);">nar um contrato para fazer</div><div style="left: 129.4px; top: 656.867px; font-size: 19.9253px; font-family: sans-serif; transform: scaleX(0.903622);">a distribuição de uma grande cadeia de hipermercados, cujo n</div><div style="left: 626.4px; top: 656.867px; font-size: 19.9253px; font-family: sans-serif; transform: scaleX(0.907116);">ome não pode ser divulgado por</div><div style="left: 129.4px; top: 681.066px; font-size: 19.9253px; font-family: sans-serif; transform: scaleX(0.884818);">razões de confidencialidade. A empresa que o Sr. Caracol gere</div><div style="left: 628.2px; top: 681.066px; font-size: 19.9253px; font-family: sans-serif; transform: scaleX(0.88049);">tem ao seu dispor vários tipos de</div><div style="left: 129.4px; top: 705.066px; font-size: 19.9253px; font-family: sans-serif; transform: scaleX(0.887461);">meio de transporte, carrinhas, camiões, aviões, comboios,</div><div style="left: 590.2px; top: 705.066px; font-size: 19.9253px; font-family: sans-serif; transform: scaleX(0.881168);">barcos e até drones. Existem também</div><div style="left: 129.4px; top: 729.066px; font-size: 19.9253px; font-family: sans-serif; transform: scaleX(0.8817);">várias estações de abastecimento e controlo.</div><div style="left: 158.8px; top: 753.266px; font-size: 19.9253px; font-family: sans-serif; transform: scaleX(0.947845);">O contrato estabelecido obriga o Sr. Caracol a providenciar</div><div style="left: 660.8px; top: 753.266px; font-size: 19.9253px; font-family: sans-serif; transform: scaleX(0.936243);">o transporte de vários tipos</div><div style="left: 129.4px; top: 777.266px; font-size: 19.9253px; font-family: sans-serif; transform: scaleX(0.920601);">de mercadoria dos fornecedores até ao hipermercado. Apenas</div><div style="left: 645.602px; top: 777.266px; font-size: 19.9253px; font-family: sans-serif; transform: scaleX(0.918445);">existe um hipermercado, mas</div><div style="left: 129.4px; top: 801.266px; font-size: 19.9253px; font-family: sans-serif; transform: scaleX(0.903031);">existem vários fornecedores. Por exemplo, a fábrica da Sra.</div><div style="left: 614.4px; top: 801.266px; font-size: 19.9253px; font-family: sans-serif; transform: scaleX(0.920659);">Abelha produz mel, o talho do Sr.</div><div style="left: 129.4px; top: 825.466px; font-size: 19.9253px; font-family: sans-serif; transform: scaleX(0.902133);">Lobo fornece carne e o pomar do Sr. Pardal fornece fruta.</div><div style="left: 158.8px; top: 849.466px; font-size: 19.9253px; font-family: sans-serif; transform: scaleX(0.903736);">Contudo o Sr. Caracol está preocupado com a capacidade da sua</div><div style="left: 690.6px; top: 849.466px; font-size: 19.9253px; font-family: sans-serif; transform: scaleX(0.893514);">rede de transporte, dado</div><div style="left: 129.4px; top: 873.666px; font-size: 19.9253px; font-family: sans-serif; transform: scaleX(0.953522);">que o contrato especifica que o Sr. Caracol terá de garantir o t</div><div style="left: 652.8px; top: 873.666px; font-size: 19.9253px; font-family: sans-serif; transform: scaleX(0.934237);">ransporte de todo o material</div><div style="left: 129.4px; top: 897.666px; font-size: 19.9253px; font-family: sans-serif; transform: scaleX(0.895186);">comprado aos fornecedores. O objectivo deste projecto é aux</div><div style="left: 615.8px; top: 897.666px; font-size: 19.9253px; font-family: sans-serif; transform: scaleX(0.910499);">iliar o Sr. Caracol, desenvolvendo</div><div style="left: 129.4px; top: 921.666px; font-size: 19.9253px; font-family: sans-serif; transform: scaleX(0.895255);">uma aplicação informática que determina a capacidade máxim</div><div style="left: 623.8px; top: 921.666px; font-size: 19.9253px; font-family: sans-serif; transform: scaleX(0.847285);">a que a sua rede é capaz de trans-</div><div style="left: 129.4px; top: 945.866px; font-size: 19.9253px; font-family: sans-serif; transform: scaleX(0.905876);">portar. Para tal terá acesso a informação sobre a rede. Para u</div><div style="left: 624.602px; top: 945.866px; font-size: 19.9253px; font-family: sans-serif; transform: scaleX(0.917169);">niformizar a informação, apenas</div><div style="left: 129.4px; top: 969.866px; font-size: 19.9253px; font-family: sans-serif; transform: scaleX(0.930592);">será considerado o peso dos materiais a transportar. Os forn</div><div style="left: 627.8px; top: 969.866px; font-size: 19.9253px; font-family: sans-serif; transform: scaleX(0.927441);">ecedores irão indicar o peso do</div><div style="left: 129.4px; top: 994.066px; font-size: 19.9253px; font-family: sans-serif; transform: scaleX(0.927589);">material que produzem. Cada meio de transporte tem um limite</div><div style="left: 652.2px; top: 994.066px; font-size: 19.9253px; font-family: sans-serif; transform: scaleX(0.917183);">máximo que consegue movi-</div><div style="left: 129.4px; top: 1018.07px; font-size: 19.9253px; font-family: sans-serif; transform: scaleX(0.900928);">mentar. As estações de abastecimento são necessárias para a</div><div style="left: 628.8px; top: 1018.07px; font-size: 19.9253px; font-family: sans-serif; transform: scaleX(0.902368);">bastecer os meios de transporte</div><div style="left: 129.4px; top: 1042.07px; font-size: 19.9253px; font-family: sans-serif; transform: scaleX(0.92218);">e também para fazer o controlo do transporte, garantindo que</div><div style="left: 637px; top: 1042.07px; font-size: 19.9253px; font-family: sans-serif; transform: scaleX(0.931374);">o material não é danificado ou</div><div style="left: 129.4px; top: 1066.27px; font-size: 19.9253px; font-family: sans-serif; transform: scaleX(0.898349);">extraviado. Contudo as próprias estações de abastecimento</div><div style="left: 611.2px; top: 1066.27px; font-size: 19.9253px; font-family: sans-serif; transform: scaleX(0.901145);">têm uma capacidade máxima, que</div><div style="left: 129.4px; top: 1090.27px; font-size: 19.9253px; font-family: sans-serif; transform: scaleX(0.895255);">limita a quantidade de material que podem processar.</div><div style="left: 158.801px; top: 1114.27px; font-size: 19.9253px; font-family: sans-serif; transform: scaleX(0.881128);">O seguinte diagrama representa uma rede:</div><div style="left: 502.40066666666655px; top: 1182.0662866666664px; font-size: 19.92533333333333px; font-family: sans-serif;">1</div><div class="endOfContent active"></div></div></div><div class="page" data-page-number="2" style="width: 1019px; height: 1319px;" data-loaded="true"><div class="canvasWrapper" style="width: 1019px; height: 1319px;"><canvas id="page2" width="1020" height="1320" style="width: 1020px; height: 1320px;"></canvas></div><div class="textLayer" style="width: 1019px; height: 1319px;"><div style="left: 315.133px; top: 169.046px; font-size: 19.9253px; font-family: sans-serif; transform: scaleX(0.912372);">Sra. Abelha, 50</div><div style="left: 311.733px; top: 263.535px; font-size: 19.9253px; font-family: sans-serif; transform: scaleX(0.898748);">Sr. Pardal, 70</div><div style="left: 309.933px; top: 405.266px; font-size: 19.9253px; font-family: sans-serif; transform: scaleX(0.92963);">Sr. Lobo, 40</div><div style="left: 596.42px; top: 261.733px; font-size: 19.9253px; font-family: sans-serif; transform: scaleX(0.905946);">Abastecimento, 100</div><div style="left: 653.113px; top: 402.666px; font-size: 19.9253px; font-family: sans-serif; transform: scaleX(0.954406);">Hiper</div><div style="left: 565.148px; top: 170.531px; font-size: 19.9253px; font-family: sans-serif; transform: scaleX(0.90327);">60</div><div style="left: 509.337px; top: 265px; font-size: 19.9253px; font-family: sans-serif; transform: scaleX(0.90327);">60</div><div style="left: 531.64px; top: 406.681px; font-size: 19.9253px; font-family: sans-serif; transform: scaleX(0.90327);">70</div><div style="left: 662.625px; top: 335.446px; font-size: 19.9253px; font-family: sans-serif; transform: scaleX(0.90327);">200</div><div style="left: 158.8px; top: 489.267px; font-size: 19.9253px; font-family: sans-serif; transform: scaleX(0.952276);">Neste caso a fábrica da Sr. Abelha produz 50 Kg de mel, o pomar d</div><div style="left: 726.8px; top: 489.267px; font-size: 19.9253px; font-family: sans-serif; transform: scaleX(0.981673);">o Sr. Pardal 70 Kg</div><div style="left: 129.398px; top: 513.267px; font-size: 19.9253px; font-family: sans-serif; transform: scaleX(0.941797);">de fruta e o Sr. Lobo 40 Kg de carne. A rede consegue transporta</div><div style="left: 673.398px; top: 513.267px; font-size: 19.9253px; font-family: sans-serif; transform: scaleX(0.943753);">r 60 Kg entre a fábrica da</div><div style="left: 129.398px; top: 537.267px; font-size: 19.9253px; font-family: sans-serif; transform: scaleX(0.924481);">Sr. Abelha e o posto de Abastecimento. Este posto pode proces</div><div style="left: 651.198px; top: 537.267px; font-size: 19.9253px; font-family: sans-serif; transform: scaleX(0.921011);">sar apenas 100 Kg. Também</div><div style="left: 129.398px; top: 561.467px; font-size: 19.9253px; font-family: sans-serif; transform: scaleX(0.918734);">é possível transportar 60 Kg entre o pomar do Sr. Pardal e o pos</div><div style="left: 653px; top: 561.467px; font-size: 19.9253px; font-family: sans-serif; transform: scaleX(0.914755);">to abastecimento. É possível</div><div style="left: 129.398px; top: 585.467px; font-size: 19.9253px; font-family: sans-serif; transform: scaleX(0.905974);">transportar 200 Kg entre o posto de abastecimento e o Hiper. P</div><div style="left: 635.597px; top: 585.467px; font-size: 19.9253px; font-family: sans-serif; transform: scaleX(0.917826);">or último é possivel transportar</div><div style="left: 129.398px; top: 609.666px; font-size: 19.9253px; font-family: sans-serif; transform: scaleX(0.973267);">70 Kg entre o matador do Sr.  Lobo e o Hiper.  Neste caso a capacid</div><div style="left: 716.398px; top: 609.666px; font-size: 19.9253px; font-family: sans-serif; transform: scaleX(0.930188);">ade máxima da rede</div><div style="left: 129.398px; top: 633.666px; font-size: 19.9253px; font-family: sans-serif; transform: scaleX(0.927277);">é de apenas 140 Kg, sendo que os fornecedores produzem 160 Kg.</div><div style="left: 697.198px; top: 633.666px; font-size: 19.9253px; font-family: sans-serif; transform: scaleX(0.95995);">Portanto o Sr. Caracol</div><div style="left: 129.398px; top: 657.666px; font-size: 19.9253px; font-family: sans-serif; transform: scaleX(0.889677);">precisa de aumentar a capacidade da sua rede, em particular p</div><div style="left: 626.598px; top: 657.666px; font-size: 19.9253px; font-family: sans-serif; transform: scaleX(0.878529);">recisa de aumentar a capacidade</div><div style="left: 129.398px; top: 681.867px; font-size: 19.9253px; font-family: sans-serif; transform: scaleX(0.926534);">da estação de abastecimento. Por exemplo se conseguir aumen</div><div style="left: 655.398px; top: 681.867px; font-size: 19.9253px; font-family: sans-serif; transform: scaleX(0.925902);">tar esta estação para 110Kg</div><div style="left: 129.398px; top: 705.867px; font-size: 19.9253px; font-family: sans-serif; transform: scaleX(0.92057);">isso irá aumentar a capacidade da rede para 150 Kg. Note que ca</div><div style="left: 665.198px; top: 705.867px; font-size: 19.9253px; font-family: sans-serif; transform: scaleX(0.942967);">so a produção do Sr. Lobo</div><div style="left: 129.398px; top: 730.067px; font-size: 19.9253px; font-family: sans-serif; transform: scaleX(0.899317);">aumentasse para 70 Kg isso seria suportado pela rede de trans</div><div style="left: 633.998px; top: 730.067px; font-size: 19.9253px; font-family: sans-serif; transform: scaleX(0.912427);">porte, contudo essa limitação é</div><div style="left: 129.398px; top: 754.067px; font-size: 19.9253px; font-family: sans-serif; transform: scaleX(0.887987);">relativa a um fornecedor e não à rede de transporte, logo a apl</div><div style="left: 619.8px; top: 754.067px; font-size: 19.9253px; font-family: sans-serif; transform: scaleX(0.883075);">icação não deve reportar este tipo</div><div style="left: 129.398px; top: 778.067px; font-size: 19.9253px; font-family: sans-serif; transform: scaleX(0.908301);">de informação.</div><div style="left: 129.398px; top: 842.742px; font-size: 28.6923px; font-family: sans-serif; transform: scaleX(1.07829);">Input</div><div style="left: 129.398px; top: 890.267px; font-size: 19.9253px; font-family: sans-serif; transform: scaleX(0.918014);">O ficheiro de entrada contém a informação da rede e dos fornece</div><div style="left: 658.598px; top: 890.267px; font-size: 19.9253px; font-family: sans-serif; transform: scaleX(0.915087);">dores. Esta informação está</div><div style="left: 129.398px; top: 914.267px; font-size: 19.9253px; font-family: sans-serif; transform: scaleX(0.892496);">organizada da seguinte forma:</div><div style="left: 158.59883333333332px; top: 961.3276546666663px; font-size: 19.92533333333333px; font-family: sans-serif;">•</div><div style="left: 178.199px; top: 956.267px; font-size: 19.9253px; font-family: sans-serif; transform: scaleX(0.908263);">Uma linha com os valores</div><div style="left: 393.9991666666666px; top: 960.3911639999995px; font-size: 19.92533333333333px; font-family: sans-serif;">f</div><div style="left: 406.9991666666666px; top: 963.2404866666662px; font-size: 19.92533333333333px; font-family: sans-serif;">&gt;</div><div style="left: 426.799px; top: 956.267px; font-size: 19.9253px; font-family: sans-serif; transform: scaleX(0.903535);">0,</div><div style="left: 446.7993333333333px; top: 960.3911639999995px; font-size: 19.92533333333333px; font-family: sans-serif;">e</div><div style="left: 460.19906666666674px; top: 961.3276546666663px; font-size: 19.92533333333333px; font-family: sans-serif;">≥</div><div style="left: 480.199px; top: 956.267px; font-size: 19.9253px; font-family: sans-serif; transform: scaleX(0.852841);">0 e</div><div style="left: 508.5994000000001px; top: 960.3911639999995px; font-size: 19.92533333333333px; font-family: sans-serif;">t</div><div style="left: 519.7992666666668px; top: 961.3276546666663px; font-size: 19.92533333333333px; font-family: sans-serif;">≥</div><div style="left: 539.799px; top: 956.267px; font-size: 19.9253px; font-family: sans-serif; transform: scaleX(0.86994);">0 separados por 1 espaço, que representam,</div><div style="left: 178.198px; top: 980.466px; font-size: 19.9253px; font-family: sans-serif; transform: scaleX(0.893748);">respectivamente, o número de fornecedores, o número de esta</div><div style="left: 675.599px; top: 980.466px; font-size: 19.9253px; font-family: sans-serif; transform: scaleX(0.881802);">ções de abastecimento e o</div><div style="left: 178.198px; top: 1004.47px; font-size: 19.9253px; font-family: sans-serif; transform: scaleX(0.892462);">número de ligações que existem na rede do Sr. Caracol;</div><div style="left: 158.59793333333343px; top: 1049.3276546666661px; font-size: 19.92533333333333px; font-family: sans-serif;">•</div><div style="left: 178.198px; top: 1044.27px; font-size: 19.9253px; font-family: sans-serif; transform: scaleX(0.935566);">Uma linha com</div><div style="left: 310.99776666666673px; top: 1048.3911639999997px; font-size: 19.92533333333333px; font-family: sans-serif;">f</div><div style="left: 325.198px; top: 1044.27px; font-size: 19.9253px; font-family: sans-serif; transform: scaleX(0.888342);">inteiros, separados por 1 espaço, que representam a produçã</div><div style="left: 808.796px; top: 1044.27px; font-size: 19.9253px; font-family: sans-serif; transform: scaleX(0.873745);">o de cada</div><div style="left: 178.198px; top: 1068.27px; font-size: 19.9253px; font-family: sans-serif; transform: scaleX(0.911642);">fornecedor;</div><div style="left: 158.5979666666668px; top: 1113.1278213333328px; font-size: 19.92533333333333px; font-family: sans-serif;">•</div><div style="left: 178.198px; top: 1108.07px; font-size: 19.9253px; font-family: sans-serif; transform: scaleX(0.923521);">Uma linha com</div><div style="left: 305.59863333333345px; top: 1112.1913306666663px; font-size: 19.92533333333333px; font-family: sans-serif;">e</div><div style="left: 319.199px; top: 1108.07px; font-size: 19.9253px; font-family: sans-serif; transform: scaleX(0.874795);">inteiros, separados por 1 espaço, que representam a capacid</div><div style="left: 792.599px; top: 1108.07px; font-size: 19.9253px; font-family: sans-serif; transform: scaleX(0.845036);">ade de cada</div><div style="left: 178.197px; top: 1132.27px; font-size: 19.9253px; font-family: sans-serif; transform: scaleX(0.870874);">estação de abastecimento;</div><div style="left: 502.39723333333353px; top: 1182.0667866666663px; font-size: 19.92533333333333px; font-family: sans-serif;">2</div><div class="endOfContent"></div></div></div><div class="page" data-page-number="3" style="width: 1019px; height: 1319px;"><div class="loadingIcon"></div></div><div class="page" data-page-number="4" style="width: 1019px; height: 1319px;"><div class="loadingIcon"></div></div><div class="page" data-page-number="5" style="width: 1019px; height: 1319px;"><div class="loadingIcon"></div></div><div class="page" data-page-number="6" style="width: 1019px; height: 1319px;"><div class="loadingIcon"></div></div><div class="page" data-page-number="7" style="width: 1019px; height: 1319px;"><div class="loadingIcon"></div></div></div>
+        </div>
+
+        <div id="errorWrapper" hidden="true">
+          <div id="errorMessageLeft">
+            <span id="errorMessage"></span>
+            <button id="errorShowMore" data-l10n-id="error_more_info">More Information</button>
+            <button id="errorShowLess" data-l10n-id="error_less_info" hidden="true">Less Information</button>
+          </div>
+          <div id="errorMessageRight">
+            <button id="errorClose" data-l10n-id="error_close">Close</button>
+          </div>
+          <div class="clearBoth"></div>
+          <textarea id="errorMoreInfo" hidden="true" readonly="readonly"></textarea>
+        </div>
+      </div> <!-- mainContainer -->
+
+      <div id="overlayContainer" class="hidden">
+        <div id="passwordOverlay" class="container hidden">
+          <div class="dialog">
+            <div class="row">
+              <p id="passwordText" data-l10n-id="password_label">Enter the password to open this PDF file.</p>
+            </div>
+            <div class="row">
+              <input type="password" id="password" class="toolbarField">
+            </div>
+            <div class="buttonRow">
+              <button id="passwordCancel" class="overlayButton"><span data-l10n-id="password_cancel">Cancel</span></button>
+              <button id="passwordSubmit" class="overlayButton"><span data-l10n-id="password_ok">OK</span></button>
+            </div>
+          </div>
+        </div>
+        <div id="documentPropertiesOverlay" class="container hidden">
+          <div class="dialog">
+            <div class="row">
+              <span data-l10n-id="document_properties_file_name">File name:</span> <p id="fileNameField">-</p>
+            </div>
+            <div class="row">
+              <span data-l10n-id="document_properties_file_size">File size:</span> <p id="fileSizeField">-</p>
+            </div>
+            <div class="separator"></div>
+            <div class="row">
+              <span data-l10n-id="document_properties_title">Title:</span> <p id="titleField">-</p>
+            </div>
+            <div class="row">
+              <span data-l10n-id="document_properties_author">Author:</span> <p id="authorField">-</p>
+            </div>
+            <div class="row">
+              <span data-l10n-id="document_properties_subject">Subject:</span> <p id="subjectField">-</p>
+            </div>
+            <div class="row">
+              <span data-l10n-id="document_properties_keywords">Keywords:</span> <p id="keywordsField">-</p>
+            </div>
+            <div class="row">
+              <span data-l10n-id="document_properties_creation_date">Creation Date:</span> <p id="creationDateField">-</p>
+            </div>
+            <div class="row">
+              <span data-l10n-id="document_properties_modification_date">Modification Date:</span> <p id="modificationDateField">-</p>
+            </div>
+            <div class="row">
+              <span data-l10n-id="document_properties_creator">Creator:</span> <p id="creatorField">-</p>
+            </div>
+            <div class="separator"></div>
+            <div class="row">
+              <span data-l10n-id="document_properties_producer">PDF Producer:</span> <p id="producerField">-</p>
+            </div>
+            <div class="row">
+              <span data-l10n-id="document_properties_version">PDF Version:</span> <p id="versionField">-</p>
+            </div>
+            <div class="row">
+              <span data-l10n-id="document_properties_page_count">Page Count:</span> <p id="pageCountField">-</p>
+            </div>
+            <div class="row">
+              <span data-l10n-id="document_properties_page_size">Page Size:</span> <p id="pageSizeField">-</p>
+            </div>
+            <div class="buttonRow">
+              <button id="documentPropertiesClose" class="overlayButton"><span data-l10n-id="document_properties_close">Close</span></button>
+            </div>
+          </div>
+        </div>
+        <div id="printServiceOverlay" class="container hidden">
+          <div class="dialog">
+            <div class="row">
+              <span data-l10n-id="print_progress_message">Preparing document for printing…</span>
+            </div>
+            <div class="row">
+              <progress value="0" max="100"></progress>
+              <span data-l10n-id="print_progress_percent" data-l10n-args="{ &quot;progress&quot;: 0 }" class="relative-progress">0%</span>
+            </div>
+            <div class="buttonRow">
+              <button id="printCancel" class="overlayButton"><span data-l10n-id="print_progress_close">Cancel</span></button>
+            </div>
+          </div>
+        </div>
+<div id="chromeFileAccessOverlay" class="container hidden">
+  <div class="dialog">
+    <div class="row">
+      <!-- The extension icon (PDF.js logo) will be shown at the left, to help
+           users with recognizing which checkbox they have to click when they
+           visit chrome://extensions.
+      -->
+      <p id="chrome-pdfjs-logo-bg" style="
+          display: block;
+          padding-left: 60px;
+          min-height: 48px;
+          background-size: 48px;
+          background-repeat: no-repeat;
+          font-size: 14px;
+          line-height: 1.8em;
+          word-break: break-all;">
+        Click on
+        "<span id="chrome-file-access-label">Allow access to file URLs</span>"
+        at
+        <a id="chrome-link-to-extensions-page">chrome://extensions</a>
+        <br>
+        to view <span id="chrome-url-of-local-file">this PDF file.</span>
+      </p>
+    </div>
+    <div class="row">
+      <p>
+        or select the file again:
+        <input type="file" id="chrome-file-fallback" accept=".pdf">
+      </p>
+    </div>
+  </div>
+</div>
+
+      </div>  <!-- overlayContainer -->
+
+    </div> <!-- outerContainer -->
+    <div id="printContainer"></div>
+  
+
+
+</body></html>
