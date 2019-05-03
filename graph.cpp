@@ -12,7 +12,7 @@ graph create_graph(std::istream &in)
   if (!(std::cin >> t)) throw "failed to get t";
   else if (t <= 0) throw "non positive t";
 
-  graph res(f + e + 2);
+  graph res(f + 2*e + 2);
   for (ssize_t i = 0; i < f; i++) {
     int production_value;
     if (!(std::cin >> production_value)) throw "failed to get a producer value";
@@ -22,7 +22,7 @@ graph create_graph(std::istream &in)
   for (ssize_t i = 0; i < e; i++) {
     int max_cap;
     if (!(std::cin >> max_cap)) throw "failed to get a capacity value";
-    res.change_capacity(i + f + 2, max_cap);
+    res.add_edge(i + f + 2, i + e + f + 2, max_cap);
   }
 
   for (ssize_t i = 0; i < t; i++) {

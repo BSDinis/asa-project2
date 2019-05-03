@@ -19,7 +19,6 @@ class graph {
   struct node {
     using neighbour = pair<int,int>;
     int excess   = 0;
-    int cap      = 0;
     vector<neighbour> neighbours;
 
     void add(int v, int w) noexcept {
@@ -57,17 +56,14 @@ class graph {
 
     inline int V() const noexcept { return node_list.size(); }
 
-    inline void change_capacity(int u, int w) noexcept { node_list[u].cap = w; }
-
 #if GRAPH_DEBUG
     std::ostream & print(std::ostream & os) const noexcept {
-      os << "src\t|dst\t|capsrc\t|edgcap\t|\n";
+      os << "src\t|dst\t|edgcap\t|\n";
       const ssize_t sz = node_list.size();
       for (int i = 0; i < sz; i++) {
         for (const auto & dst : node_list[i].neighbours) {
           os << i << "\t|"
             << dst.first << "\t|"
-            << node_list[i].cap << "\t|"
             << dst.second << "\t|\n";
         }
       }
