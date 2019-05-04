@@ -16,12 +16,13 @@ using std::make_pair;
 using std::vector;
 class graph {
 
-  struct edge {
+  struct edge { // be carefull with witch node is looking at the edge
+    int origin;
     int destination;
     int capacity;
     int flow;
 
-    edge(int v, int cap) noexcept : destination(v), capacity(cap) {} 
+    edge(int u, int v, int cap) noexcept : destination(v), capacity(cap) {}
     
     bool is_saturated() { return capacity == flow; }
   };
@@ -29,10 +30,10 @@ class graph {
   struct node {
     int excess   = 0;
     int height   = 0;
-    vector<struct edge> neighbours;
+    vector<struct edge*> neighbours;
 
-    void add(int v, int w) noexcept {
-      neighbours.emplace_back( edge(v, w) );
+    void add(struct edge* edge) noexcept {
+      neighbours.emplace_back( edge );
     }
   };
 
@@ -45,14 +46,14 @@ class graph {
     graph(size_t n)  noexcept : _node_list(n) { // reserv
       while (n-- > 0) _node_list.emplace_back();
     }
-    ~graph() = default;
+    ~graph() = default; // needs to free edges;
 
     inline bool has_link(const int u, const int v) const noexcept
     {
       if (!(u < V() && v < V())) return false;
       if (u == v) return true;
       for (const auto neighbour : _node_list[u].neighbours) {
-        if (neighbour.destination == v) return true;
+        if (neighbour->destination == v) return true;
       }
       return false;
     }
@@ -60,8 +61,9 @@ class graph {
     bool add_edge(const int u, const int v, const int w) noexcept 
     {
       //if (has_link(u, v)) return false; //not neccessary nor efficient
-      _node_list[u].add(v, w);
-      _node_list[v].add(u, 0); // for relable to front. might be a better way
+      struct edge* edge = new graph::edge(u, v, w);
+      _node_list[u].add(edge);
+      _node_list[v].add(edge);
       return true;
     }
 
@@ -81,8 +83,8 @@ class graph {
       for (int i = 0; i < sz; i++) {
         for (const auto & dst : _node_list[i].neighbours) {
           os << i << "\t|"
-            << dst.destination << "\t|"
-            << dst.capacity << "\t|\n";
+            << dst->destination << "\t|"
+            << dst->capacity << "\t|\n";
         }
       }
 
