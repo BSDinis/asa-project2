@@ -12,17 +12,22 @@ graph create_graph(std::istream &in)
   if (!(std::cin >> t)) throw "failed to get t";
   else if (t <= 0) throw "non positive t";
 
-  graph res(f + e + 2);
+
+//  We want corte minimo closer to target so we need to do Relable to Front of transposed graph
+  graph res(f + e*2 + 2);
+  res.set_f(f);
+  res.set_e(e);
+
   for (ssize_t i = 0; i < f; i++) {
     int production_value;
     if (!(std::cin >> production_value)) throw "failed to get a producer value";
-    res.add_edge(0, i + 2, production_value); // connect dummy source to producer vertex with the capacity of the production
+    res.add_edge(i + 2, 0, production_value); // connect producer vertex to dummy sourse with the capacity of the production
   }
 
   for (ssize_t i = 0; i < e; i++) {
     int max_cap;
     if (!(std::cin >> max_cap)) throw "failed to get a capacity value";
-    res.change_capacity(i + f + 2, max_cap);
+    res.add_edge(i*2 + f + 2, i + f + 2, max_cap); // connect dummy station to station with the capacity of station
   }
 
   for (ssize_t i = 0; i < t; i++) {
@@ -33,7 +38,9 @@ graph create_graph(std::istream &in)
     if (d < 1) throw "invalid destination value";
     if (!(std::cin >> c)) throw "failed to get capacity val";
     if (c < 1) throw "invalid capacity value";
-    res.add_edge(o, d, c);
+
+    if ( d > f + 2 ) d += e; // because of dummy station
+    res.add_edge(d, o, c);
   }
 
   return res;
