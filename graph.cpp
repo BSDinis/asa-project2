@@ -1,4 +1,5 @@
 #include "graph.hpp"
+#include <algorithm>
 
 graph create_graph(std::istream &in)
 {
@@ -46,3 +47,47 @@ graph create_graph(std::istream &in)
   return res;
 }
 
+int cf(struct edge& edge) // residual capacity
+{ return edge.capacity - edge.flow; }
+
+void graph::relable(int u) // h[u] = 1 + min {h[v] : (u,v) ∈ Ef }
+{
+  unsigned int min_h = -1;
+  for ( auto edge : _node_list[u].neighbours )
+    min_h = std::min(_node_list[edge.destination].height, min_h);
+
+  if ( min_h != (unsigned int)-1 )
+    _node_list[u].height = min_h + 1;
+}
+
+void graph::push(int u, int v, struct edge& edge) /*
+                                * 1 df(u,v) = min(e[u],cf[u,v])
+                                * 2 f[u,v] = f[u,v] + df(u,v)
+                                * 3 f[v,u] = −f[u,v]
+                                * 4 e[u] = e[u]−df(u,v)
+                                * 5 e[v] = e[v] +df(u,v)
+                                */
+{
+  int df = std::min( _node_list[u].excess, cf(edge) );
+  edge.flow += df;
+
+  // 3 f[v,u] = −f[u,v;: how to easily access transposed edge??
+
+  _node_list[u].excess -= df;
+  _node_list[v].excess += df;
+}
+
+void graph::initialize_preflow() // all heights, excesses and flow already at 0
+{
+  _node_list[source].height = V();
+
+  for ( auto edge : _node_list[source].neighbours ) {
+    edge.flow = edge.capacity;
+    // f[u,s] = −c(s,u);
+    _node_list[edge.destination].excess = edge.capacity;
+    _node_list[source].excess -= edge.capacity;
+  }
+
+}
+void graph::discharge(int u, int v) {}
+void graph::relable_to_front() {}

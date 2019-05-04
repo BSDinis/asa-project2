@@ -7,9 +7,9 @@
 #define GRAPH_DEBUG 1
 
 // DUMMY
-#define source (0);
+#define source (1);
 // TARGET
-#define target (1);
+#define target (0);
 
 using std::pair;
 using std::make_pair;
@@ -17,28 +17,26 @@ using std::vector;
 class graph {
 
   struct edge { // be carefull with witch node is looking at the edge
-    int origin;
     int destination;
     int capacity;
-    int flow;
+    int flow = 0;
 
-    edge(int u, int v, int cap) noexcept : destination(v), capacity(cap) {}
-    
-    bool is_saturated() { return capacity == flow; }
+    edge(int v, int cap) noexcept : destination(v), capacity(cap) {}
   };
 
   struct node {
-    int excess   = 0;
-    int height   = 0;
-    vector<struct edge*> neighbours;
+    int excess = 0;
+    unsigned int height = 0;
+    vector<struct edge> neighbours;
 
-    void add(struct edge* edge) noexcept {
+    void add(struct edge&& edge) noexcept {
       neighbours.emplace_back( edge );
     }
   };
 
   int _f=0, _e=0;
   vector<node> _node_list;
+
   public:
     graph()          noexcept : graph(128) {} // reserve
     graph(int n)     noexcept : graph(static_cast<size_t>(n)) { } // reserve
@@ -50,10 +48,10 @@ class graph {
 
     inline bool has_link(const int u, const int v) const noexcept
     {
-      if ( !(u < _node_list.size() && v < _node_list.size()) ) return false;
+      if ( !(u < V() && v < V()) ) return false;
       if (u == v) return true;
       for (const auto neighbour : _node_list[u].neighbours) {
-        if (neighbour->destination == v) return true;
+        if (neighbour.destination == v) return true;
       }
       return false;
     }
@@ -61,20 +59,23 @@ class graph {
     bool add_edge(const int u, const int v, const int w) noexcept 
     {
       //if (has_link(u, v)) return false; //not neccessary nor efficient
-      struct edge* edge = new graph::edge(u, v, w);
-      _node_list[u].add(edge);
-      _node_list[v].add(edge);
+      _node_list[u].add(edge(v, w));
+      _node_list[v].add(edge(u, 0));
       return true;
     }
 
-    inline int V() const noexcept { return _node_list.size() - _e; }
+    inline int V() const noexcept { return _node_list.size(); }
     inline int get_f() const noexcept { return _f; }
     inline int get_e() const noexcept { return _e; }
 
     inline void set_f(int f) { _f = f; }
     inline void set_e(int e) { _e = e; }
 
-    inline void relable(int u) noexcept { _node_list[u].height++; }
+    void push(int u, int v);
+    void relable(int u);
+    void initialize_preflow();
+    void discharge(int u, int v);
+    void relable_to_front();
 
 #if GRAPH_DEBUG
     std::ostream & print(std::ostream & os) const noexcept {
@@ -83,8 +84,8 @@ class graph {
       for (int i = 0; i < sz; i++) {
         for (const auto & dst : _node_list[i].neighbours) {
           os << i << "\t|"
-            << dst->destination << "\t|"
-            << dst->capacity << "\t|\n";
+            << dst.destination << "\t|"
+            << dst.capacity << "\t|\n";
         }
       }
 
