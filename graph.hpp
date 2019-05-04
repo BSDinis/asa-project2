@@ -50,7 +50,7 @@ class graph {
 
     inline bool has_link(const int u, const int v) const noexcept
     {
-      if (!(u < V() && v < V())) return false;
+      if ( !(u < _node_list.size() && v < _node_list.size()) ) return false;
       if (u == v) return true;
       for (const auto neighbour : _node_list[u].neighbours) {
         if (neighbour->destination == v) return true;
@@ -67,7 +67,7 @@ class graph {
       return true;
     }
 
-    inline int V() const noexcept { return _node_list.size()-_e; }
+    inline int V() const noexcept { return _node_list.size() - _e; }
     inline int get_f() const noexcept { return _f; }
     inline int get_e() const noexcept { return _e; }
 
