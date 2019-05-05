@@ -1,4 +1,5 @@
 #include "graph.hpp"
+#include <list>
 #include <algorithm>
 
 graph create_graph(std::istream &in)
@@ -47,7 +48,7 @@ graph create_graph(std::istream &in)
   return res;
 }
 
-int cf(struct edge& edge) // residual capacity
+int graph::cf(struct edge& edge) // residual capacity
 { return edge.capacity - edge.flow; }
 
 void graph::relable(int u) // h[u] = 1 + min {h[v] : (u,v) ∈ Ef }
@@ -60,19 +61,11 @@ void graph::relable(int u) // h[u] = 1 + min {h[v] : (u,v) ∈ Ef }
     _node_list[u].height = min_h + 1;
 }
 
-void graph::push(int u, int v, struct edge& edge) /*
-                                * 1 df(u,v) = min(e[u],cf[u,v])
-                                * 2 f[u,v] = f[u,v] + df(u,v)
-                                * 3 f[v,u] = −f[u,v]
-                                * 4 e[u] = e[u]−df(u,v)
-                                * 5 e[v] = e[v] +df(u,v)
-                                */
+void graph::push(int u, int v, struct edge& edge)
 {
   int df = std::min( _node_list[u].excess, cf(edge) );
   edge.flow += df;
-
-  // 3 f[v,u] = −f[u,v;: how to easily access transposed edge??
-
+  edge.trans_edge->flow = -edge.flow;
   _node_list[u].excess -= df;
   _node_list[v].excess += df;
 }
@@ -83,11 +76,40 @@ void graph::initialize_preflow() // all heights, excesses and flow already at 0
 
   for ( auto edge : _node_list[source].neighbours ) {
     edge.flow = edge.capacity;
-    // f[u,s] = −c(s,u);
+    edge.trans_edge->flow = -edge.capacity;
     _node_list[edge.destination].excess = edge.capacity;
     _node_list[source].excess -= edge.capacity;
   }
 
 }
-void graph::discharge(int u, int v) {}
-void graph::relable_to_front() {}
+
+void graph::discharge(int u)
+{
+  unsigned int i=0; // slides suggest i should be stored in u but i dont know why (implies you look at neighbers >= i first )
+  struct node& node = _node_list[u];
+  while ( node.excess > 0 ) {
+    if ( i >= node.neighbours.size() ) {
+      relable(u);
+      i=0;
+    } else if ( cf( node.neighbours[i] ) > 0
+              && node.height == _node_list[node.neighbours[i].destination].height + 1 )
+      push(u, node.neighbours[i].destination, node.neighbours[i]);
+    
+    else i++;
+  }
+}
+
+/*
+5 u = head[L]
+6 while u != NIL
+7   do oldh = h[u]
+8      Discharge(u)
+9      if h[u] > oldh
+10        then colocar u na frente da lista L
+11     u = next[u]
+*/
+
+void graph::relable_to_front()
+{
+  initialize_preflow();
+}

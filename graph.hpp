@@ -7,21 +7,24 @@
 #define GRAPH_DEBUG 1
 
 // DUMMY
-#define source (1);
+#define source 1
 // TARGET
-#define target (0);
+#define target 0
 
-using std::pair;
-using std::make_pair;
 using std::vector;
 class graph {
 
-  struct edge { // be carefull with witch node is looking at the edge
+  struct edge {
     int destination;
     int capacity;
     int flow = 0;
 
+    struct edge* trans_edge = NULL;
+
     edge(int v, int cap) noexcept : destination(v), capacity(cap) {}
+    edge(int v, int cap, struct edge* p_edge) noexcept : edge(v, cap) {
+      trans_edge = p_edge;
+    }
   };
 
   struct node {
@@ -39,7 +42,7 @@ class graph {
 
   public:
     graph()          noexcept : graph(128) {} // reserve
-    graph(int n)     noexcept : graph(static_cast<size_t>(n)) { } // reserve
+    graph(int n)     noexcept : graph(static_cast<size_t>(n)) {} // reserve
     graph(ssize_t n) noexcept : graph(static_cast<size_t>(n)) {} // reserve
     graph(size_t n)  noexcept : _node_list(n) { // reserv
       while (n-- > 0) _node_list.emplace_back();
@@ -60,7 +63,10 @@ class graph {
     {
       //if (has_link(u, v)) return false; //not neccessary nor efficient
       _node_list[u].add(edge(v, w));
-      _node_list[v].add(edge(u, 0));
+      _node_list[v].add(edge(u, 0, &_node_list[u].neighbours.back()));
+
+      _node_list[u].neighbours.back().trans_edge = &_node_list[v].neighbours.back();
+
       return true;
     }
 
@@ -71,10 +77,12 @@ class graph {
     inline void set_f(int f) { _f = f; }
     inline void set_e(int e) { _e = e; }
 
-    void push(int u, int v);
+    inline int cf(struct edge& edge);
+
+    void push(int u, int v, edge& edge);
     void relable(int u);
     void initialize_preflow();
-    void discharge(int u, int v);
+    void discharge(int u);
     void relable_to_front();
 
 #if GRAPH_DEBUG
