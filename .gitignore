@@ -4,11 +4,15 @@
 # Unignore all with extensions
 !*.*
 
+
 # Unignore all dirs
 !*/
 
 # Unignore Makefile
 !Makefile
+
+# Ignore dotfiles
+.*.*
 
 # Prerequisites
 *.d
