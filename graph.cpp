@@ -90,17 +90,16 @@ void graph::initialize_preflow() noexcept // all heights, excesses and flow alre
 
 void graph::discharge(int u) noexcept
 {
-  unsigned int i=0; // slides suggest i should be stored in u but i dont know why (implies you look at neighbers >= i first )
   struct node& node = _node_list[u];
   while ( node.excess > 0 ) {
-    if ( i >= node.neighbours.size() ) {
+    if ( node.current >= node.neighbours.size() ) {
       relable(u);
-      i=0;
-    } else if ( cf( node.neighbours[i] ) > 0
-              && node.height == _node_list[node.neighbours[i].destination].height + 1 )
-      push(u, node.neighbours[i].destination, node.neighbours[i]);
+      node.current = 0;
+    } else if ( cf( node.neighbours[node.current] ) > 0
+              && node.height == _node_list[node.neighbours[node.current].destination].height + 1 )
+      push(u, node.neighbours[node.current].destination, node.neighbours[node.current]);
 
-    else i++;
+    else node.current++;
   }
 }
 
