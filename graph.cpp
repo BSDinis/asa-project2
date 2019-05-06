@@ -6,62 +6,67 @@ graph create_graph(std::istream &in)
 {
   using std::vector;
 
-  int f, e, t;
-  if (!(std::cin >> f)) throw "failed to get f";
-  else if (f <= 0) throw "non positive f";
-  if (!(std::cin >> e)) throw "failed to get e";
-  else if (e <= 0) throw "non positive e";
-  if (!(std::cin >> t)) throw "failed to get t";
-  else if (t <= 0) throw "non positive t";
+  int prods, shippers, nconns;
+  if (!(std::cin >> prods)) throw "failed to get f";
+  else if (prods <= 0) throw "non positive f";
+  if (!(std::cin >> shippers)) throw "failed to get e";
+  else if (shippers <= 0) throw "non positive e";
+  if (!(std::cin >> nconns)) throw "failed to get t";
+  else if (nconns <= 0) throw "non positive t";
 
 
-//  We want corte minimo closer to target so we need to do Relable to Front of transposed graph
-  graph res(f + e*2 + 2);
-  res.set_f(f);
-  res.set_e(e);
+  //  We want minimal cut closer to target so we need
+  //  to do Relable to Front of transposed graph
+  graph res(1 + 1 + prods + shippers * 2); // source + dest + producers + 2 * shipping
+  res.n_producers(prods);
+  res.n_shippers(shippers);
 
-  for (ssize_t i = 0; i < f; i++) {
+  for (ssize_t producer = 0; producer < prods; producer++) {
     int production_value;
     if (!(std::cin >> production_value)) throw "failed to get a producer value";
-    res.add_edge(i + 2, 0, production_value); // connect producer vertex to dummy sourse with the capacity of the production
+
+    // connect producer vertex to dummy sourse with the capacity of the production
+    res.add_edge(producer + 2, 0, production_value);
   }
 
-  for (ssize_t i = 0; i < e; i++) {
+  for (ssize_t shipper = 0; shipper < shippers; shipper++) {
     int max_cap;
     if (!(std::cin >> max_cap)) throw "failed to get a capacity value";
-    res.add_edge(i*2 + f + 2, i + f + 2, max_cap); // connect dummy station to station with the capacity of station
+
+    // split shipper in two; the edge has the capacity
+    res.add_edge(shipper * 2 + prods + 2, shipper + prods + 2, max_cap);
   }
 
-  for (ssize_t i = 0; i < t; i++) {
-    int o, d, c;
-    if (!(std::cin >> o)) throw "failed to get source val";
-    if (o < 2) throw "invalid source value";
-    if (!(std::cin >> d)) throw "failed to get destination val";
-    if (d < 1) throw "invalid destination value";
-    if (!(std::cin >> c)) throw "failed to get capacity val";
-    if (c < 1) throw "invalid capacity value";
+  for (ssize_t connection = 0; connection < nconns; connection++) {
+    int src, dst, cap;
+    if (!(std::cin >> src)) throw "failed to get source val";
+    if (src < 2) throw "invalid source value";
+    if (!(std::cin >> dst)) throw "failed to get destination val";
+    if (dst < 1) throw "invalid destination value";
+    if (!(std::cin >> cap)) throw "failed to get capacity val";
+    if (cap < 1) throw "invalid capacity value";
 
-    if ( d > f + 2 ) d += e; // because of dummy station
-    res.add_edge(d, o, c);
+    if ( dst > prods + 2 ) dst += shippers; // because of dummy station
+    res.add_edge(dst, src, cap);
   }
 
   return res;
 }
 
-int graph::cf(struct edge& edge) // residual capacity
+int graph::cf(struct edge& edge) noexcept // residual capacity
 { return edge.capacity - edge.flow; }
 
-void graph::relable(int u) // h[u] = 1 + min {h[v] : (u,v) ∈ Ef }
+void graph::relable(int u) noexcept // h[u] = 1 + min {h[v] : (u,v) ∈ Ef }
 {
-  unsigned int min_h = -1;
+  unsigned int min_h = (unsigned) -1;
   for ( auto edge : _node_list[u].neighbours )
     min_h = std::min(_node_list[edge.destination].height, min_h);
 
-  if ( min_h != (unsigned int)-1 )
+  if ( min_h != (unsigned) -1 )
     _node_list[u].height = min_h + 1;
 }
 
-void graph::push(int u, int v, struct edge& edge)
+void graph::push(int u, int v, struct edge& edge) noexcept
 {
   int df = std::min( _node_list[u].excess, cf(edge) );
   edge.flow += df;
@@ -70,7 +75,7 @@ void graph::push(int u, int v, struct edge& edge)
   _node_list[v].excess += df;
 }
 
-void graph::initialize_preflow() // all heights, excesses and flow already at 0
+void graph::initialize_preflow() noexcept // all heights, excesses and flow already at 0
 {
   _node_list[source].height = V();
 
@@ -83,7 +88,7 @@ void graph::initialize_preflow() // all heights, excesses and flow already at 0
 
 }
 
-void graph::discharge(int u)
+void graph::discharge(int u) noexcept
 {
   unsigned int i=0; // slides suggest i should be stored in u but i dont know why (implies you look at neighbers >= i first )
   struct node& node = _node_list[u];
@@ -94,22 +99,23 @@ void graph::discharge(int u)
     } else if ( cf( node.neighbours[i] ) > 0
               && node.height == _node_list[node.neighbours[i].destination].height + 1 )
       push(u, node.neighbours[i].destination, node.neighbours[i]);
-    
+
     else i++;
   }
 }
 
-/*
-5 u = head[L]
-6 while u != NIL
-7   do oldh = h[u]
-8      Discharge(u)
-9      if h[u] > oldh
-10        then colocar u na frente da lista L
-11     u = next[u]
-*/
-
-void graph::relable_to_front()
+void graph::relable_to_front() noexcept
 {
   initialize_preflow();
+  vector<int> L(_node_list.size() - 2);
+  ssize_t sz = L.size();
+  for (int i = 0; i < sz; i++)
+    L[i] = i + 2;
+
+  for (auto u : L) {
+    int old_h = height(u);
+    discharge(u);
+    if (height(u) > old_h)
+      L.push_back(u);
+  }
 }

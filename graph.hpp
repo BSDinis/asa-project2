@@ -19,32 +19,34 @@ class graph {
     int capacity;
     int flow = 0;
 
-    struct edge* trans_edge = NULL;
+    edge * trans_edge;
 
-    edge(int v, int cap) noexcept : destination(v), capacity(cap) {}
-    edge(int v, int cap, struct edge* p_edge) noexcept : edge(v, cap) {
-      trans_edge = p_edge;
-    }
+    edge(int v, int cap, edge* p_edge) noexcept :
+      destination(v),
+      capacity(cap),
+      trans_edge(p_edge) {}
+
+    edge(int v, int cap) noexcept : edge(v, cap, nullptr) {}
   };
 
   struct node {
     int excess = 0;
     unsigned int height = 0;
-    vector<struct edge> neighbours;
+    vector<edge> neighbours;
 
-    void add(struct edge&& edge) noexcept {
-      neighbours.emplace_back( edge );
+    void add(edge&& n_edge) noexcept {
+      neighbours.emplace_back( n_edge );
     }
   };
 
-  int _f=0, _e=0;
+  int _n_producers=0, _n_shippers=0;
   vector<node> _node_list;
 
   public:
     graph()          noexcept : graph(128) {} // reserve
     graph(int n)     noexcept : graph(static_cast<size_t>(n)) {} // reserve
     graph(ssize_t n) noexcept : graph(static_cast<size_t>(n)) {} // reserve
-    graph(size_t n)  noexcept : _node_list(n) { // reserv
+    graph(size_t n)  noexcept : _node_list(n) { // reserve
       while (n-- > 0) _node_list.emplace_back();
     }
     ~graph() = default; // needs to free edges;
@@ -53,37 +55,36 @@ class graph {
     {
       if ( !(u < V() && v < V()) ) return false;
       if (u == v) return true;
-      for (const auto neighbour : _node_list[u].neighbours) {
+      for (const auto neighbour : _node_list[u].neighbours)
         if (neighbour.destination == v) return true;
-      }
+
       return false;
     }
 
-    bool add_edge(const int u, const int v, const int w) noexcept 
+    bool add_edge(const int u, const int v, const int w) noexcept
     {
-      //if (has_link(u, v)) return false; //not neccessary nor efficient
       _node_list[u].add(edge(v, w));
       _node_list[v].add(edge(u, 0, &_node_list[u].neighbours.back()));
-
       _node_list[u].neighbours.back().trans_edge = &_node_list[v].neighbours.back();
-
       return true;
     }
 
     inline int V() const noexcept { return _node_list.size(); }
-    inline int get_f() const noexcept { return _f; }
-    inline int get_e() const noexcept { return _e; }
+    inline int n_producers() const noexcept { return _n_producers; }
+    inline int n_shippers()  const noexcept { return _n_shippers; }
 
-    inline void set_f(int f) { _f = f; }
-    inline void set_e(int e) { _e = e; }
+    inline int n_producers(int f) noexcept { return _n_producers = f; }
+    inline int n_shippers(int e) noexcept  { return _n_shippers = e; }
 
-    inline int cf(struct edge& edge);
+    inline int height(const int u) const noexcept { return _node_list[u].height; }
 
-    void push(int u, int v, edge& edge);
-    void relable(int u);
-    void initialize_preflow();
-    void discharge(int u);
-    void relable_to_front();
+    inline int cf(struct edge& edge) noexcept;
+
+    void push(int u, int v, edge& edge) noexcept;
+    void relable(int u) noexcept;
+    void initialize_preflow() noexcept;
+    void discharge(int u) noexcept;
+    void relable_to_front() noexcept;
 
 #if GRAPH_DEBUG
     std::ostream & print(std::ostream & os) const noexcept {
