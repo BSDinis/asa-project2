@@ -104,18 +104,22 @@ void graph::discharge(int u) noexcept
   }
 }
 
-void graph::relable_to_front() noexcept
+void graph::relabel_to_front() noexcept
 {
   initialize_preflow();
-  vector<int> L(_node_list.size() - 2);
-  ssize_t sz = L.size();
-  for (int i = 0; i < sz; i++)
-    L[i] = i + 2;
+  std::list<int> L;
+  ssize_t sz = V();
+  for (int i = 2; i < sz; i++)
+    L.push_back(i);
 
-  for (auto u : L) {
+  for (std::list<int>::iterator it=L.begin() ; it != L.end(); ++it) {
+    int u = *it;
     int old_h = height(u);
     discharge(u);
-    if (height(u) > old_h)
-      L.push_back(u);
+    if (height(u) > old_h) {
+      L.push_front(u);
+      L.erase(it);
+      it = L.begin();
+    }
   }
 }

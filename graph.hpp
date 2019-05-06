@@ -31,7 +31,7 @@ class graph {
 
   struct node {
     int excess = 0;
-    unsigned int height = 0;
+    unsigned int height = 0, current = 0;
     vector<edge> neighbours;
 
     void add(edge&& n_edge) noexcept {
@@ -84,7 +84,7 @@ class graph {
     void relable(int u) noexcept;
     void initialize_preflow() noexcept;
     void discharge(int u) noexcept;
-    void relable_to_front() noexcept;
+    void relabel_to_front() noexcept;
 
 #if GRAPH_DEBUG
     std::ostream & print(std::ostream & os) const noexcept {
