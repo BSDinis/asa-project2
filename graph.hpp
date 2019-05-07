@@ -8,9 +8,9 @@
 #define GRAPH_DEBUG 1
 
 // DUMMY
-#define source 1
+#define source 0
 // TARGET
-#define target 0
+#define target 1
 
 using std::vector;
 
@@ -83,7 +83,8 @@ class graph {
       inline int push(int df) noexcept { return _excess -= df ; }
       inline int recv(int df) noexcept { return _excess += df ; }
 
-      inline int relabel(int new_height) noexcept { return _height = new_height ; }
+      inline int relabel(int new_height) noexcept
+      { std::cerr << "new_height:" << new_height << '\n'; return _height = new_height ; }
 
       inline int flow() const noexcept {
           return std::accumulate(
