@@ -8,9 +8,9 @@
 #define GRAPH_DEBUG 1
 
 // DUMMY
-#define source 0
+#define source 1
 // TARGET
-#define target 1
+#define target 0
 
 using std::vector;
 
@@ -40,7 +40,6 @@ class graph {
     inline bool connects_to(int v) const noexcept
     { return _dst == v; }
 
-
     inline edge * transpose(edge *e) noexcept
     { return trans_edge = e; }
 
@@ -52,8 +51,7 @@ class graph {
   };
 
   class node {
-    int _excess = 0;
-    int _height = 0, _current = 0;
+    int _excess = 0, _height = 0;
     vector<edge> _edges;
 
     public:
@@ -143,8 +141,8 @@ class graph {
     void discharge(int u) noexcept;
     void relabel_to_front() noexcept;
 
-    inline int  curr_flow() const noexcept {
-      return - _node_list[source].excess();
+    inline int max_flow() const noexcept {
+      return _node_list[target].excess();
     }
 
 #if GRAPH_DEBUG

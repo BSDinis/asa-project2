@@ -26,7 +26,7 @@ graph create_graph(std::istream &in)
     if (!(std::cin >> production_value)) throw "failed to get a producer value";
 
     // connect producer vertex to dummy sourse with the capacity of the production
-    res.add_edge(0, producer + 2, production_value);
+    res.add_edge(producer + 2, 0, production_value);
   }
 
   for (ssize_t shipper = 0; shipper < shippers; shipper++) {
@@ -34,7 +34,7 @@ graph create_graph(std::istream &in)
     if (!(std::cin >> max_cap)) throw "failed to get a capacity value";
 
     // split shipper in two; the edge has the capacity
-    res.add_edge(shipper + prods + 2, shipper + shippers + prods + 2, max_cap);
+    res.add_edge(shipper + shippers + prods + 2, shipper + prods + 2, max_cap);
   }
 
   for (ssize_t connection = 0; connection < nconns; connection++) {
@@ -45,7 +45,7 @@ graph create_graph(std::istream &in)
     if (dst < 1) throw "invalid destination value";
     if (!(std::cin >> cap)) throw "failed to get capacity val";
     if (cap < 1) throw "invalid capacity value";
-    res.add_edge_to_shipper(src, dst, cap, prods, shippers);
+    res.add_edge_to_shipper(dst, src, cap, prods, shippers);
   }
 
   return res;
@@ -53,14 +53,18 @@ graph create_graph(std::istream &in)
 
 int graph::relabel(int u) noexcept // h[u] = 1 + min {h[v] : (u,v) ∈ Ef }
 {
-  auto min_h = std::min_element(
-      _node_list.begin(), _node_list.end(),
-      [](const node & a, const node & b) -> bool
-      { return a.height() < b.height(); }
-      );
+  unsigned int min_h = -1;
 
-  if (min_h != _node_list.end())
-    return _node_list[u].relabel(min_h->height() + 1);
+  node node_u = _node_list[u];
+
+  for ( auto edge : node_u.edges() ) {
+    node node_v = _node_list[ edge.dst() ];
+    if ( node_u.height() <= node_v.height() && (unsigned) node_v.height() < min_h )
+      min_h = node_v.height();
+  }
+
+  if (min_h != (unsigned)-1)
+    return node_u.relabel(min_h + 1);
 
   return -1;
 }
@@ -98,7 +102,7 @@ void graph::discharge(int idx) noexcept
       edge_it = u.edges().begin();
     }
     else if (edge_it->res_cap() > 0
-        && u.height() == _node_list[edge_it->dst()].height() + 1){
+        && u.height() == _node_list[edge_it->dst()].height() + 1) {
       std::cerr << " ;pushed to " << edge_it->dst();
       push(idx, edge_it->dst(), *edge_it);
     }
