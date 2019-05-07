@@ -16,19 +16,39 @@ using std::vector;
 
 class graph {
 
-  struct edge {
-    int destination;
-    int capacity;
-    int flow = 0;
+  class edge {
+    int _dst;
+    int _cap;
+    int _flow = 0;
 
     edge * trans_edge;
 
-    edge(int v, int cap, edge* p_edge) noexcept :
-      destination(v),
-      capacity(cap),
-      trans_edge(p_edge) {}
+    public:
+    edge(int d, int c, edge* e) noexcept
+      : _dst(d), _cap(c), trans_edge(e) {}
 
-    edge(int v, int cap) noexcept : edge(v, cap, nullptr) {}
+    edge(int v, int cap) noexcept
+      : edge(v, cap, nullptr) {}
+
+    inline int flow() const noexcept { return _flow; }
+    inline int cap() const noexcept  { return _cap; }
+    inline int dst() const noexcept  { return _dst; }
+
+    inline int res_cap() const noexcept
+    { return _cap - _flow; }
+
+    inline bool connects_to(int v) const noexcept
+    { return _dst == v; }
+
+
+    inline edge * transpose(edge *e) noexcept
+    { return trans_edge = e; }
+
+    inline void push(int df) noexcept {
+      _flow += df;
+      trans_edge->_flow -= df;
+    }
+
   };
 
   class node {
@@ -42,13 +62,17 @@ class graph {
         return &_edges.back();
       }
 
+      inline const vector<edge> & cedges() const noexcept {
+        return _edges;
+      }
+
       inline vector<edge> & edges() noexcept {
         return _edges;
       }
 
       inline bool can_reach(int v) const noexcept {
         for (const auto & e : _edges)
-          if (e.destination == v) return true;
+          if (e.connects_to(v)) return true;
 
         return false;
       }
@@ -63,10 +87,10 @@ class graph {
 
       inline int flow() const noexcept {
           return std::accumulate(
-          _edges.begin(),
-          _edges.end(),
+          _edges.cbegin(),
+          _edges.cend(),
           0,
-          [](int &x, const edge &y) { return x + y.flow; }
+          [](int &x, const edge &y) { return x + y.flow(); }
           );
       }
   };
@@ -94,7 +118,7 @@ class graph {
     {
       auto e1 = _node_list[u].add(edge(v, w));
       auto e2 = _node_list[v].add(edge(u, 0, e1));
-      e1->trans_edge = e2;
+      e1->transpose(e2);
       return true;
     }
 
@@ -106,8 +130,6 @@ class graph {
     inline int n_shippers(int e) noexcept  { return _n_shippers = e; }
 
     inline int height(const int u) const noexcept { return _node_list[u].height(); }
-
-    inline int cf(struct edge& edge) noexcept;
 
     void push(int u, int v, edge& edge) noexcept;
     int  relabel(int u) noexcept;
@@ -124,10 +146,10 @@ class graph {
       os << "src\t|dst\t|capsrc\t|edgcap\t|\n";
       ssize_t i = 0;
       for (const auto & n : _node_list) {
-        for (const auto & e : n.edges()) {
+        for (const auto & e : n.cedges()) {
           os << i << "\t|"
-            << e.destination << "\t|"
-            << e.capacity << "\t|\n";
+            << e.dst()<< "\t|"
+            << e.cap() << "\t|\n";
         }
         i++;
       }
