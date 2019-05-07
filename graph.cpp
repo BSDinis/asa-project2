@@ -56,47 +56,53 @@ graph create_graph(std::istream &in)
 int graph::cf(struct edge& edge) noexcept // residual capacity
 { return edge.capacity - edge.flow; }
 
-void graph::relable(int u) noexcept // h[u] = 1 + min {h[v] : (u,v) ∈ Ef }
+int graph::relabel(int u) noexcept // h[u] = 1 + min {h[v] : (u,v) ∈ Ef }
 {
-  unsigned int min_h = (unsigned) -1;
-  for ( auto edge : _node_list[u].neighbours )
-    min_h = std::min(_node_list[edge.destination].height, min_h);
+  auto min_h = std::min_element(
+      _node_list.begin(), _node_list.end(),
+      [](const node && a, const node && b) -> bool
+      { return a.height() < b.height(); }
+      );
 
-  if ( min_h != (unsigned) -1 )
-    _node_list[u].height = min_h + 1;
+  if (min_h != _node_list.end())
+    return _node_list[u].relabel(min_h->height() + 1);
+
+  return -1;
 }
 
-void graph::push(int u, int v, struct edge& edge) noexcept
+void graph::push(int u, int v, edge& e) noexcept
 {
-  int df = std::min( _node_list[u].excess, cf(edge) );
-  edge.flow += df;
-  edge.trans_edge->flow = -edge.flow;
-  _node_list[u].excess -= df;
-  _node_list[v].excess += df;
+  int df = std::min( _node_list[u].excess(), cf(e) );
+  e.flow += df;
+  e.trans_edge->flow -= df;
+  _node_list[u].push(df);
+  _node_list[v].recv(df);
 }
 
-void graph::initialize_preflow() noexcept // all heights, excesses and flow already at 0
+void graph::initialize_preflow() noexcept
 {
-  _node_list[source].height = V();
+  // all heights, excesses and flow already at 0
+  _node_list[source].relabel(V());
 
-  for ( auto edge : _node_list[source].neighbours ) {
+  for ( auto edge : _node_list[source].neighbours() ) {
     edge.flow = edge.capacity;
     edge.trans_edge->flow = -edge.capacity;
-    _node_list[edge.destination].excess = edge.capacity;
-    _node_list[source].excess -= edge.capacity;
+    _node_list[source].push(edge.capacity);
+    _node_list[edge.destination].recv(edge.capacity);
   }
 
 }
 
 void graph::discharge(int u) noexcept
 {
-  struct node& node = _node_list[u];
-  while ( node.excess > 0 ) {
-    if ( node.current >= node.neighbours.size() ) {
-      relable(u);
-      node.current = 0;
-    } else if ( cf( node.neighbours[node.current] ) > 0
-              && node.height == _node_list[node.neighbours[node.current].destination].height + 1 )
+  node& n = _node_list[u];
+  while ( n.excess() > 0 ) {
+    if ( n.current >= n.neighbours.size() ) {
+      relabel(u);
+      n.current(0);
+    }
+    else if ( cf( n.neighbours[n.current] ) > 0
+      && n.height == _node_list[n.neighbours[n.current].destination].height + 1 )
       push(u, node.neighbours[node.current].destination, node.neighbours[node.current]);
 
     else node.current++;
