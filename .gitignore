@@ -14,6 +14,9 @@
 # Ignore dotfiles
 .*.*
 
+# ignore test files
+student-tests
+
 # Prerequisites
 *.d
 
