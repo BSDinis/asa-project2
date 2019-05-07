@@ -8,12 +8,10 @@ int main() {
   std::cout.tie(nullptr);
 #endif
 
-  graph g;
-
-  g = create_graph(std::cin);
-  std::clog << "created graph\n";
+  graph g = create_graph(std::cin);
+  std::cerr << g << "\n";
   g.relabel_to_front();
-  std::clog << "relabeled the fron\n";
+  std::cerr << g << "\n ========== \n";
 
   std::cout << g.curr_flow() << '\n';
 

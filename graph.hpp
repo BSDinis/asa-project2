@@ -103,7 +103,6 @@ class graph {
     graph(int n)     noexcept : graph(static_cast<size_t>(n)) {} // reserve
     graph(ssize_t n) noexcept : graph(static_cast<size_t>(n)) {} // reserve
     graph(size_t n)  noexcept : _node_list(n) { // reserve
-      while (n-- > 0) _node_list.emplace_back();
     }
     ~graph() = default; // needs to free edges;
 
@@ -112,6 +111,12 @@ class graph {
       if ( !(u < V() && v < V()) ) return false;
       if (u == v) return true;
       return _node_list[u].can_reach(v);
+    }
+
+    bool add_edge_to_shipper(int u, const int v, const int w, const int n_prods, const int n_shippers) noexcept
+    {
+      if (u >= 2 + n_prods) u += n_shippers;
+      return add_edge(u, v, w);
     }
 
     bool add_edge(const int u, const int v, const int w) noexcept
@@ -138,12 +143,12 @@ class graph {
     void relabel_to_front() noexcept;
 
     inline int  curr_flow() const noexcept {
-      return _node_list[source].flow();
+      return - _node_list[source].excess();
     }
 
 #if GRAPH_DEBUG
     std::ostream & print(std::ostream & os) const noexcept {
-      os << "src\t|dst\t|capsrc\t|edgcap\t|\n";
+      os << "src\t|dst\t|capsrc\t|\n";
       ssize_t i = 0;
       for (const auto & n : _node_list) {
         for (const auto & e : n.cedges()) {

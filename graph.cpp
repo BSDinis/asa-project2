@@ -26,7 +26,7 @@ graph create_graph(std::istream &in)
     if (!(std::cin >> production_value)) throw "failed to get a producer value";
 
     // connect producer vertex to dummy sourse with the capacity of the production
-    res.add_edge(producer + 2, 0, production_value);
+    res.add_edge(0, producer + 2, production_value);
   }
 
   for (ssize_t shipper = 0; shipper < shippers; shipper++) {
@@ -34,7 +34,7 @@ graph create_graph(std::istream &in)
     if (!(std::cin >> max_cap)) throw "failed to get a capacity value";
 
     // split shipper in two; the edge has the capacity
-    res.add_edge(shipper * 2 + prods + 2, shipper + prods + 2, max_cap);
+    res.add_edge(shipper + prods + 2, shipper + shippers + prods + 2, max_cap);
   }
 
   for (ssize_t connection = 0; connection < nconns; connection++) {
@@ -45,9 +45,7 @@ graph create_graph(std::istream &in)
     if (dst < 1) throw "invalid destination value";
     if (!(std::cin >> cap)) throw "failed to get capacity val";
     if (cap < 1) throw "invalid capacity value";
-
-    if ( dst > prods + 2 ) dst += shippers; // because of dummy station
-    res.add_edge(dst, src, cap);
+    res.add_edge_to_shipper(src, dst, cap, prods, shippers);
   }
 
   return res;
@@ -88,9 +86,24 @@ void graph::initialize_preflow() noexcept
 
 }
 
-void graph::discharge(int u) noexcept
+void graph::discharge(int idx) noexcept
 {
-  // refactor
+  node & u = _node_list[idx];
+  auto edge_it  = u.edges().begin();
+  const auto end  = u.edges().end();
+  while (u.excess() > 0) {
+    if (edge_it == end) {
+      relabel(idx);
+      edge_it = u.edges().begin();
+    }
+    else if (edge_it->res_cap() > 0
+        && u.height() == _node_list[edge_it->dst()].height() + 1){
+      push(idx, edge_it->dst(), *edge_it);
+    }
+    else {
+      edge_it++;
+    }
+  }
 }
 
 void graph::relabel_to_front() noexcept
@@ -98,13 +111,20 @@ void graph::relabel_to_front() noexcept
   initialize_preflow();
   std::list<int> L;
   ssize_t sz = V();
-  for (int i = 2; i < sz; i++)
+  std::cerr << "L:";
+  for (int i = 2; i < sz; i++) {
     L.push_back(i);
+    std::cerr << ' ' << i;
+  }
+  std::cerr << '\n';
 
-  for (std::list<int>::iterator it=L.begin() ; it != L.end(); ++it) {
+
+  for (auto it=L.begin(); it != L.end(); ++it) {
     int u = *it;
     int old_h = height(u);
+    std::cerr << "working on " << u << '[' << old_h << "]... ";
     discharge(u);
+    std::cerr << "discharged\n";
     if (height(u) > old_h) {
       L.push_front(u);
       L.erase(it);
