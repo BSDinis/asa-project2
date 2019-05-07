@@ -3,6 +3,7 @@
 #include <vector>
 #include <iostream>
 #include <utility>
+#include <numeric>
 
 #define GRAPH_DEBUG 1
 
@@ -85,6 +86,15 @@ class graph {
     void initialize_preflow() noexcept;
     void discharge(int u) noexcept;
     void relabel_to_front() noexcept;
+
+    inline int  curr_flow() const noexcept {
+      return std::accumulate(
+          _node_list[0].neighbours.begin(),
+          _node_list[0].neighbours.end(),
+          0,
+          [](int &x, const edge &y) { return x + y.flow; }
+          );
+    }
 
 #if GRAPH_DEBUG
     std::ostream & print(std::ostream & os) const noexcept {
