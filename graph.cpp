@@ -123,23 +123,28 @@ vector<int> shippers_in_cut(graph &g) noexcept
   return ship_cut;
 }
 
-vector<int> min_cut(graph &g) noexcept
+vector<pair<int,int>> min_cut(graph &g) noexcept
 {
-  vector<int> ship_cut;
+  vector<pair<int,int>> ship_cut;
   auto nodes = g.nodes();
 
-  for ( unsigned i = 1; i < nodes.size() - g.n_shippers() ; i++ ) {
+  for ( int i = 1; i < ((int) nodes.size()) - g.n_shippers() ; i++ ) {
     for ( auto * edge : nodes[i].edges() ) {
       if ( edge->cap() > 0
         && edge->dst()->id() != target
         && nodes[i].height() >= nodes[source].height()
         && edge->dst()->height() < nodes[source].height() )
       {
-        ship_cut.push_back(edge->dst()->id());  // tem de se fazer id - n_shippers se id > 2+producers+shippers 
-        ship_cut.push_back(i);
+        // tem de se fazer id - n_shippers se id > 2+producers+shippers
+        int id = edge->dst()->id();
+        if (id >= 2 + g.n_producers() + g.n_shippers())
+          id -= g.n_shippers();
+
+        ship_cut.emplace_back(id, i);
       }
     }
   }
 
+  std::sort(ship_cut.begin(), ship_cut.end());
   return ship_cut;
 }

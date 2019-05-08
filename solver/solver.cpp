@@ -9,11 +9,7 @@ int main() {
 #endif
 
   graph g = create_graph(std::cin);
-  //std::cerr << g << "\n";
   relabel_to_front(g);
-
-  //std::cerr << g << "\n ========== \n";
-
   std::cout << g.curr_flow() << '\n';
 
   auto ids = shippers_in_cut(g);
@@ -27,8 +23,7 @@ int main() {
 
   auto nodes = min_cut(g);
   for ( auto node = nodes.begin(); node != nodes.end(); node++ ) {
-  	std::cout << *node << " "; node++;
-  	std::cout << *node << "\n";
+  	std::cout << node->first << ' ' << node->second << '\n';
   }
 
 
