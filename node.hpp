@@ -5,13 +5,13 @@
 #include "edge.hpp"
 
 using std::vector;
-using vec_it = std::vector<edge>::iterator;
+using vec_it = std::vector<edge *>::iterator;
 
 class node {
   int _overflow = 0;
   int _height   = 0;
 
-  vector<edge> _edges;
+  vector<edge *> _edges;
   vec_it       _curr = _edges.end(); // hey
 
   inline int src_push(edge & e) noexcept {
@@ -30,9 +30,9 @@ class node {
 
   int relabel() noexcept {
     int min_height(std::numeric_limits<int>::max());
-    for (const auto & e : _edges) {
-      if (e.dst()->height() >= _height)
-        min_height = std::min(min_height, e.dst()->height());
+    for (const auto * e : _edges) {
+      if (e->dst()->height() >= _height)
+        min_height = std::min(min_height, e->dst()->height());
     }
 
     return _height = min_height + 1;
@@ -51,8 +51,8 @@ class node {
 
   int src_discharge() noexcept {
     int sum = 0;
-    for (auto & e : _edges)
-      sum += src_push(e);
+    for (auto * e : _edges)
+      sum += src_push(*e);
 
     return sum;
   }
@@ -66,7 +66,7 @@ class node {
         continue;
       }
 
-      edge & e = *it;
+      edge & e = **it;
       if (e.res_cap() > 0 && _height == e.dst()->height() + 1) {
         push(e);
       }
@@ -78,19 +78,7 @@ class node {
     _curr = it;
   }
 
-  edge * add_edge(node * dst, int cap, edge *in) noexcept {
-    _edges.emplace_back(edge(dst, cap, in));
-    return &_edges.back();
-  }
-
-  edge * add_edge(node * dst, int cap) noexcept {
-    _edges.emplace_back(edge(dst, cap));
-    edge * out = &_edges.back();
-    out->set_back(dst->add_edge(this, 0, out));
-    return out;
-  }
-
-
-  inline vector<edge> & edges() noexcept { return _edges; }
-  inline const vector<edge> & cedges() const noexcept { return _edges; }
+  inline void add_edge(edge *out) noexcept { _edges.push_back(out); }
+  inline vector<edge *> & edges() noexcept { return _edges; }
+  inline const vector<edge *> & cedges() const noexcept { return _edges; }
 };

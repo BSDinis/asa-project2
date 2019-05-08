@@ -10,7 +10,7 @@ int main() {
 
   graph g = create_graph(std::cin);
   std::cerr << g << "\n";
-  g.relabel_to_front();
+  relabel_to_front(g);
 
   std::cerr << g << "\n ========== \n";
 

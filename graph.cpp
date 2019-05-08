@@ -17,7 +17,7 @@ graph create_graph(std::istream &in)
 
   //  We want minimal cut closer to target so we need
   //  to do Relabel to Front of transposed graph
-  graph res(2 + prods + shippers * 2); // source + dest + producers + 2 * shipping
+  graph res(2 + prods + shippers * 2, 2 * (prods + shippers + nconns)); // source + dest + producers + 2 * shipping
   res.n_producers(prods);
   res.n_shippers(shippers);
 
@@ -26,6 +26,7 @@ graph create_graph(std::istream &in)
     if (!(std::cin >> production_value)) throw "failed to get a producer value";
 
     // connect producer vertex to dummy sourse with the capacity of the production
+    std::cerr << " edge " << producer + 2 << " --> " << 0 << '\n';
     res.add_edge(producer + 2, 0, production_value);
   }
 
@@ -34,6 +35,8 @@ graph create_graph(std::istream &in)
     if (!(std::cin >> max_cap)) throw "failed to get a capacity value";
 
     // split shipper in two; the edge has the capacity
+    std::cerr << " edge " << s + shippers + prods + 2 << " --> "
+      << s + prods + 2 << '\n';
     res.add_edge(s + shippers + prods + 2, s + prods + 2, max_cap);
   }
 
@@ -47,6 +50,7 @@ graph create_graph(std::istream &in)
     if (cap < 1) throw "invalid capacity value";
 
     // inverted
+    std::cerr << " edge " << dst << " --> " << src << '\n';
     res.add_edge_to_shipper(dst, src, cap, prods, shippers);
   }
 

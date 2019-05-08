@@ -19,13 +19,13 @@ class graph {
 
   int _n_producers=0, _n_shippers=0;
   vector<node> _node_list;
+  vector<edge> _edge_list;
 
   public:
-    graph()          noexcept : graph(128) {} // reserve
-    graph(int n)     noexcept : graph(static_cast<size_t>(n)) {} // reserve
-    graph(ssize_t n) noexcept : graph(static_cast<size_t>(n)) {} // reserve
-    graph(size_t n)  noexcept : _node_list(n) { // reserve
-    }
+    graph(int n, int m) noexcept : graph(static_cast<size_t>(n), static_cast<size_t>(m)) {} // reserve
+    graph(ssize_t n, ssize_t m) noexcept : graph(static_cast<size_t>(n), static_cast<size_t>(m)) {} // reserve
+    graph(size_t n, size_t m)  noexcept :
+      _node_list(n), _edge_list(m) { /* reserve */ }
     ~graph() = default; // needs to free edges;
 
     bool add_edge_to_shipper(const int u, int v, const int w, const int n_prods, const int n_shippers) noexcept
@@ -36,7 +36,17 @@ class graph {
 
     bool add_edge(const int u, const int v, const int cap) noexcept
     {
-      _node_list[u].add_edge(&_node_list[v], cap);
+      _edge_list.emplace_back(&_node_list[u], &_node_list[v], cap);
+      edge * out = &_edge_list.back();
+
+      _edge_list.emplace_back(&_node_list[v], &_node_list[u], 0);
+      edge * in  = &_edge_list.back();
+
+      out->set_back(in);
+      in->set_back(out);
+
+      _node_list[u].add_edge(out);
+      _node_list[u].add_edge(in);
       return true;
     }
 
@@ -60,14 +70,19 @@ class graph {
       */
       ssize_t idx = 0;
       for (const auto & n : _node_list) {
-        os << idx++ << "[" << &n << "]\n";
-        for (const auto & e : n.cedges()) {
-          os << " |\n |- " << e.dst() << '|' << _node_list.data()  << "\n";
+        os << idx++ << "[" << &n
+          << "] h = " << n.height()
+          << "; e = " << n.overflow() << ";\n";
+        for (const auto * e : n.cedges()) {
+          os << " |- " << (e->dst() - &(_node_list[0]))
+            << "[" << e << "] (" << e->back() << ") : "
+            << e->flow() << " / " << e->cap()
+            << "\n";
         }
         os << '\n';
       }
 
-      return os;
+      return os << " ============================================== ";
     }
 #endif
 };
