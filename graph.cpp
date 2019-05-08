@@ -82,12 +82,20 @@ void graph::push(int u, int v, edge& e) noexcept
 void graph::initialize_preflow() noexcept
 {
   // all heights, excesses and flow already at 0
+  //std::cerr << " = initializing preflow\n";
   _node_list[source].relabel(V());
+  //std::cerr << " == h[source] = " << V() << ";\n";
 
   for ( auto & pair : _node_list[source].edges() ) {
-    pair.second.push(pair.second.cap());
-    _node_list[source].push(pair.second.cap());
-    _node_list[pair.second.dst()].recv(pair.second.cap());
+    edge & e = pair.second;
+    //std::cerr << " ==  cap (source, " << pair.first  << ") = "
+     // << e.cap() << '\n';
+    //std::cerr << " ==  flow(source, " << pair.first  << ") = "
+     // << e.flow() << '\n';
+    _node_list[source].push(e.cap());
+    //std::cerr << " === excess[source] = " << _node_list[source].excess() << '\n';
+    _node_list[e.dst()].recv(e.cap());
+    //std::cerr << " === excess[source] = " << _node_list[e.dst()].excess() << '\n';
   }
 
 }
@@ -98,15 +106,27 @@ void graph::discharge(int idx) noexcept
   auto edge_it  = u.edges().begin();
   const auto end  = u.edges().end();
   while (u.excess() > 0) {
-    edge & e = edge_it->second;
     if (edge_it == end) {
+      relabel(idx);
       edge_it = u.edges().begin();
+      continue;
     }
-    else if (e.res_cap() > 0
+
+    edge & e = edge_it->second;
+
+    std::cerr << " === edge(" << idx << ", " << e.dst()
+      << "); residual capacity = " << e.res_cap() << '\n';
+
+    std::cerr << " === h[" << idx << "] = " << _node_list[idx].height() << '\n';
+    std::cerr << " === e[" << idx << "] = " << _node_list[idx].excess() << '\n';
+
+    if (e.res_cap() > 0
         && u.height() == _node_list[e.dst()].height() + 1) {
+      std::cerr << " === discharging from " << idx << " to " << e.dst() << "\n";
       push(idx, e.dst(), e);
     }
     else {
+      std::cerr << " === moving on\n";
       edge_it++;
     }
   }
@@ -115,10 +135,11 @@ void graph::discharge(int idx) noexcept
 void graph::relabel_to_front() noexcept
 {
   initialize_preflow();
+  std::cerr << " = initialized preflow \n";
   std::list<int> L;
   ssize_t sz = V();
-  std::cerr << "L:";
-  for (int i = sz - 1; i > 1; i++) {
+  std::cerr << " = L:";
+  for (int i = sz - 1; i > 1; i--) {
     L.push_back(i);
     std::cerr << ' ' << i;
   }
@@ -128,8 +149,12 @@ void graph::relabel_to_front() noexcept
   for (auto it=L.begin(); it != L.end(); ++it) {
     int u = *it;
     int old_h = height(u);
-    std::cerr << "working on " << u << '[' << old_h << "]... ";
+    std::cerr << " = working on " << u
+      << "[h = " << old_h
+      << "; e = " << _node_list[u].excess() <<"]\n";
+    std::cerr << " == started discharge\n";
     discharge(u);
+    std::cerr << " == finished discharge\n";
     if (height(u) > old_h) {
       L.push_front(u);
       L.erase(it);

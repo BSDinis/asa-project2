@@ -8,16 +8,13 @@
 
 #define GRAPH_DEBUG 1
 
-// DUMMY
-#define source 0
-// TARGET
-#define target 1
+constexpr int source = 1;
+constexpr int target = 0;
 
 using std::vector;
 using std::map;
 
 class graph {
-
   class edge {
     int _dst;
     int _cap;
@@ -155,13 +152,14 @@ class graph {
 
 #if GRAPH_DEBUG
     std::ostream & print(std::ostream & os) const noexcept {
-      os << "src\t|dst\t|capsrc\t|\n";
+      os << "src\t|dst\t|capsrc\t|flow\t\n";
       ssize_t i = 0;
       for (const auto & n : _node_list) {
         for (const auto & e : n.cedges()) {
           os << i << "\t|"
             << e.second.dst()<< "\t|"
-            << e.second.cap() << "\t|\n";
+            << e.second.cap() << "\t|"
+            << e.second.flow() << "\t|\n";
         }
         i++;
       }
