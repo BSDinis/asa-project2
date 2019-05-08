@@ -120,9 +120,9 @@ class graph {
       return _node_list[u].can_reach(v);
     }
 
-    bool add_edge_to_shipper(int u, const int v, const int w, const int n_prods, const int n_shippers) noexcept
+    bool add_edge_to_shipper(const int u, int v, const int w, const int n_prods, const int n_shippers) noexcept
     {
-      if (u >= 2 + n_prods) u += n_shippers;
+      if (v >= 2 + n_prods) v += n_shippers;
       return add_edge(u, v, w);
     }
 
