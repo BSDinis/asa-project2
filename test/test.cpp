@@ -3,12 +3,7 @@
 
 int main() {
   graph g;
-  try {
-    g = create_graph(std::cin);
-  }
-  catch (const char * str) {
-    std::cerr << "ERROR: " << str << '\n';
-  }
+  g = create_graph(std::cin);
   std::cout << g;
 
   return 0;
