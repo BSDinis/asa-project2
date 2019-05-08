@@ -1,6 +1,7 @@
 #pragma once
 
 #include <vector>
+#include <map>
 #include <iostream>
 #include <utility>
 #include <numeric>
@@ -8,11 +9,12 @@
 #define GRAPH_DEBUG 1
 
 // DUMMY
-#define source 1
+#define source 0
 // TARGET
-#define target 0
+#define target 1
 
 using std::vector;
+using std::map;
 
 class graph {
 
@@ -40,7 +42,8 @@ class graph {
     inline bool connects_to(int v) const noexcept
     { return _dst == v; }
 
-    inline edge * transpose(edge *e) noexcept
+
+    inline edge * transpose(edge * e) noexcept
     { return trans_edge = e; }
 
     inline void push(int df) noexcept {
@@ -48,31 +51,33 @@ class graph {
       trans_edge->_flow -= df;
     }
 
+    inline constexpr bool operator<(const edge & rhs) const noexcept {
+      return dst() > rhs.dst();
+    }
+
   };
 
   class node {
-    int _excess = 0, _height = 0;
-    vector<edge> _edges;
+    int _excess = 0;
+    int _height = 0, _current = 0;
+    map<int, edge, std::greater<int>> _edges; // ordered in descending order
 
     public:
       inline edge * add(edge&& n_edge) noexcept {
-        _edges.emplace_back( n_edge );
-        return &_edges.back();
+        auto p = _edges.emplace(n_edge.dst(), n_edge);
+        return &(p.first->second);
       }
 
-      inline const vector<edge> & cedges() const noexcept {
+      inline const map<int, edge, std::greater<int>> & cedges() const noexcept {
         return _edges;
       }
 
-      inline vector<edge> & edges() noexcept {
+      inline map<int, edge, std::greater<int>> & edges() noexcept {
         return _edges;
       }
 
       inline bool can_reach(int v) const noexcept {
-        for (const auto & e : _edges)
-          if (e.connects_to(v)) return true;
-
-        return false;
+        return _edges.find(v) != _edges.end();
       }
 
       inline int excess() const noexcept { return _excess; }
@@ -82,16 +87,19 @@ class graph {
       inline int recv(int df) noexcept { return _excess += df ; }
 
       inline int relabel(int new_height) noexcept
-      { std::cerr << "new_height:" << new_height << '\n'; return _height = new_height ; }
+      { return _height = new_height ; }
 
       inline int flow() const noexcept {
           return std::accumulate(
           _edges.cbegin(),
           _edges.cend(),
           0,
-          [](int &x, const edge &y) { return x + y.flow(); }
+          [](int &x,
+            const std::pair<int, edge> & y)
+          { return x + y.second.flow(); }
           );
       }
+
   };
 
   int _n_producers=0, _n_shippers=0;
@@ -141,8 +149,8 @@ class graph {
     void discharge(int u) noexcept;
     void relabel_to_front() noexcept;
 
-    inline int max_flow() const noexcept {
-      return _node_list[target].excess();
+    inline int  curr_flow() const noexcept {
+      return - _node_list[source].excess();
     }
 
 #if GRAPH_DEBUG
@@ -152,8 +160,8 @@ class graph {
       for (const auto & n : _node_list) {
         for (const auto & e : n.cedges()) {
           os << i << "\t|"
-            << e.dst()<< "\t|"
-            << e.cap() << "\t|\n";
+            << e.second.dst()<< "\t|"
+            << e.second.cap() << "\t|\n";
         }
         i++;
       }

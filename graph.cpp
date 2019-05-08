@@ -16,7 +16,7 @@ graph create_graph(std::istream &in)
 
 
   //  We want minimal cut closer to target so we need
-  //  to do Relable to Front of transposed graph
+  //  to do Relabel to Front of transposed graph
   graph res(1 + 1 + prods + shippers * 2); // source + dest + producers + 2 * shipping
   res.n_producers(prods);
   res.n_shippers(shippers);
@@ -45,6 +45,8 @@ graph create_graph(std::istream &in)
     if (dst < 1) throw "invalid destination value";
     if (!(std::cin >> cap)) throw "failed to get capacity val";
     if (cap < 1) throw "invalid capacity value";
+
+    // inverted
     res.add_edge_to_shipper(dst, src, cap, prods, shippers);
   }
 
@@ -55,10 +57,10 @@ int graph::relabel(int u) noexcept // h[u] = 1 + min {h[v] : (u,v) ∈ Ef }
 {
   unsigned int min_h = -1;
 
-  node node_u = _node_list[u];
+  node & node_u = _node_list[u];
 
-  for ( auto edge : node_u.edges() ) {
-    node node_v = _node_list[ edge.dst() ];
+  for ( auto & edge : node_u.edges() ) {
+    node & node_v = _node_list[ edge.second.dst() ];
     if ( node_u.height() <= node_v.height() && (unsigned) node_v.height() < min_h )
       min_h = node_v.height();
   }
@@ -82,10 +84,10 @@ void graph::initialize_preflow() noexcept
   // all heights, excesses and flow already at 0
   _node_list[source].relabel(V());
 
-  for ( auto edge : _node_list[source].edges() ) {
-    edge.push(edge.cap());
-    _node_list[source].push(edge.cap());
-    _node_list[edge.dst()].recv(edge.cap());
+  for ( auto & pair : _node_list[source].edges() ) {
+    pair.second.push(pair.second.cap());
+    _node_list[source].push(pair.second.cap());
+    _node_list[pair.second.dst()].recv(pair.second.cap());
   }
 
 }
@@ -97,14 +99,15 @@ void graph::discharge(int idx) noexcept
   const auto end  = u.edges().end();
   std::cerr << " ;excess: " << u.excess();
   while (u.excess() > 0) {
+    edge & e = edge_it->second;
     if (edge_it == end) {
       std::cerr << " ;rlbld: " << relabel(idx);
       edge_it = u.edges().begin();
     }
-    else if (edge_it->res_cap() > 0
-        && u.height() == _node_list[edge_it->dst()].height() + 1) {
-      std::cerr << " ;pushed to " << edge_it->dst();
-      push(idx, edge_it->dst(), *edge_it);
+    else if (e.res_cap() > 0
+        && u.height() == _node_list[e.dst()].height() + 1) {
+      std::cerr << " ;pushed to " << e.dst();
+      push(idx, e.dst(), e);
     }
     else {
       edge_it++;
@@ -118,7 +121,7 @@ void graph::relabel_to_front() noexcept
   std::list<int> L;
   ssize_t sz = V();
   std::cerr << "L:";
-  for (int i = 2; i < sz; i++) {
+  for (int i = sz - 1; i > 1; i++) {
     L.push_back(i);
     std::cerr << ' ' << i;
   }
