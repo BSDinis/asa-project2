@@ -8,11 +8,15 @@ using std::vector;
 using vec_it = std::vector<edge *>::iterator;
 
 class node {
+  int _idx = 0;
   int _overflow = 0;
   int _height   = 0;
 
   vector<edge *> _edges;
   vec_it       _curr = _edges.end(); // hey
+
+  inline int id()   const noexcept { return _idx; }
+  inline void id(int idx) noexcept { return _idx = idx; }
 
   inline int src_push(edge & e) noexcept {
     int df = e.cap();
@@ -59,7 +63,7 @@ class node {
 
   void discharge() noexcept {
     auto it = _curr;
-    while (overflow() > 0) {
+    while (_overflow > 0) {
       if (it == _edges.end()) {
         relabel();
         it = _edges.begin();
