@@ -26,7 +26,7 @@ class graph {
     graph(ssize_t n, ssize_t m) noexcept : graph(static_cast<size_t>(n), static_cast<size_t>(m)) {} // reserve
     graph(size_t n, size_t m)  noexcept :
       _node_list(n), _edge_list(m) { /* reserve */ }
-    ~graph() = default; // needs to free edges;
+    ~graph() = default;
 
     bool add_edge_to_shipper(const int u, int v, const int w, const int n_prods, const int n_shippers) noexcept
     {
@@ -46,7 +46,7 @@ class graph {
       in->set_back(out);
 
       _node_list[u].add_edge(out);
-      _node_list[u].add_edge(in);
+      _node_list[v].add_edge(in);
       return true;
     }
 
@@ -90,6 +90,7 @@ class graph {
 graph create_graph(std::istream &in) ;
 void initialize_preflow(graph & g) noexcept;
 void relabel_to_front(graph & g) noexcept;
+vector<int> shippers_in_cut(graph & g) noexcept;
 
 #if GRAPH_DEBUG
 inline std::ostream & operator<<(std::ostream &os, const graph & g)

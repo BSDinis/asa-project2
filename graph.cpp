@@ -21,6 +21,9 @@ graph create_graph(std::istream &in)
   res.n_producers(prods);
   res.n_shippers(shippers);
 
+  for ( int i = 0; i < res.V() ; i++ )
+    res.nodes[i].id(i);
+
   for (ssize_t producer = 0; producer < prods; producer++) {
     int production_value;
     if (!(std::cin >> production_value)) throw "failed to get a producer value";
@@ -95,11 +98,40 @@ void relabel_to_front(graph &g) noexcept
     std::cerr << " == " << *it
       << "[h = " << u.height()
       << "; e = " << u.overflow() <<"]\n";
-    g.print(std::cerr);
+    //g.print(std::cerr);
     if (u.height() > old_h) {
       L.push_front(*it);
       L.erase(it);
       it = L.begin();
     }
   }
+}
+
+vector<int> shippers_in_cut(graph &g) noexcept
+{
+  vector<int> ship_cut;
+  auto nodes = g.nodes();
+
+  for ( unsigned i= 2 + g.n_producers() + g.n_shippers(); i < nodes.size(); i++ ) {
+    if ( nodes[i].height() >= nodes[source].height() && nodes[i-g.n_shippers()].height() < nodes[source].height() )
+      ship_cut.push_back(i-g.n_shippers());
+  }
+
+  return ship_cut;
+}
+
+vector<int> cut(graph &g) noexcept
+{
+  vector<int> cut;
+  auto nodes = g.nodes();
+
+  for ( unsigned i = 1; i < nodes.size() - g.n_shippers() ; i++ ) {
+    for ( auto * edge : nodes[i].edges() ) {
+      if ( edge.cap() > 0 && nodes[i].height() >= nodes[source].height() && edge->dst().height() < nodes[source].height() )
+      cut.push_back(edge->dst().id());
+      cut push_back(i);
+    }
+  }
+
+  return ship_cut;
 }

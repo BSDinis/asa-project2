@@ -16,5 +16,17 @@ int main() {
 
   std::cout << g.curr_flow() << '\n';
 
+  for ( int i : shippers_in_cut(g) )
+  	std::cout << i << " ";
+
+  std::cout << "\n";
+
+  auto nodes = cut(g);
+  for ( auto node = nodes.begin(); node != nodes.end(); node++ ) {
+  	std::cout << *node << " "; node++;
+  	std::cout << *node << "\n";
+  }
+
+
   return 0;
 }
