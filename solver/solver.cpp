@@ -10,10 +10,11 @@ int main() {
 
   graph g = create_graph(std::cin);
   std::cerr << g << "\n";
-  //g.relabel_to_front();
+  g.relabel_to_front();
+
   std::cerr << g << "\n ========== \n";
 
-  //std::cout << g.curr_flow() << '\n';
+  std::cout << g.curr_flow() << '\n';
 
   return 0;
 }
