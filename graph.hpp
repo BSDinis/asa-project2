@@ -91,6 +91,7 @@ graph create_graph(std::istream &in) ;
 void initialize_preflow(graph & g) noexcept;
 void relabel_to_front(graph & g) noexcept;
 vector<int> shippers_in_cut(graph & g) noexcept;
+vector<int> min_cut(graph &g) noexcept;
 
 #if GRAPH_DEBUG
 inline std::ostream & operator<<(std::ostream &os, const graph & g)

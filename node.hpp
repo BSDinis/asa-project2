@@ -15,9 +15,6 @@ class node {
   vector<edge *> _edges;
   vec_it       _curr = _edges.end(); // hey
 
-  inline int id()   const noexcept { return _idx; }
-  inline void id(int idx) noexcept { return _idx = idx; }
-
   inline int src_push(edge & e) noexcept {
     int df = e.cap();
     _overflow -= df;
@@ -27,6 +24,9 @@ class node {
   }
 
   public:
+
+  inline int  id()  const noexcept { return _idx; }
+  inline void id(int idx) noexcept { _idx = idx; }
 
   inline int overflow() const noexcept { return _overflow; }
   inline int height()   const noexcept { return _height;   }
