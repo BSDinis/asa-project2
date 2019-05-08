@@ -19,7 +19,7 @@ onetest: $(TARGET)
 		echo $${input%.in}; \
 		echo "./$(TARGET) < $$input > $${input%.in}.outhyp" ;\
 		./$(TARGET) < $$input > $${input%.in}.outhyp ;\
-		sdiff $${input%.in}.out $${input%.in}.outhyp; \
+		diff $${input%.in}.out $${input%.in}.outhyp; \
 	done
 
 testall: $(TARGET)
@@ -27,8 +27,8 @@ testall: $(TARGET)
 		echo "==============================="; \
 		echo $${input%.in}; \
 		echo "./$(TARGET) < $$input > $${input%.in}.outhyp" ;\
-		./$(TARGET) < $$input > $${input%.in}.outhyp ;\
-		sdiff $${input%.in}.out $${input%.in}.outhyp; \
+		time ./$(TARGET) < $$input > $${input%.in}.outhyp ;\
+		diff $${input%.in}.out $${input%.in}.outhyp; \
 	done
 
 
