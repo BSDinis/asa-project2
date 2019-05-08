@@ -13,6 +13,15 @@ all: $(TARGET)
 
 $(TARGET): $(OBJECTS)
 
+onetest: $(TARGET)
+	@for input in ../studen*/T01.in ; do \
+		echo "==============================="; \
+		echo $${input%.in}; \
+		echo "./$(TARGET) < $$input > $${input%.in}.outhyp" ;\
+		./$(TARGET) < $$input > $${input%.in}.outhyp ;\
+		diff $${input%.in}.out $${input%.in}.outhyp; \
+	done
+
 testall: $(TARGET)
 	@for input in ../studen*/T*.in ; do \
 		echo "==============================="; \
