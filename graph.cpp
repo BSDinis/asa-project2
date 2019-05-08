@@ -17,7 +17,7 @@ graph create_graph(std::istream &in)
 
   //  We want minimal cut closer to target so we need
   //  to do Relabel to Front of transposed graph
-  graph res(1 + 1 + prods + shippers * 2); // source + dest + producers + 2 * shipping
+  graph res(2 + prods + shippers * 2); // source + dest + producers + 2 * shipping
   res.n_producers(prods);
   res.n_shippers(shippers);
 
@@ -29,12 +29,12 @@ graph create_graph(std::istream &in)
     res.add_edge(producer + 2, 0, production_value);
   }
 
-  for (ssize_t shipper = 0; shipper < shippers; shipper++) {
+  for (ssize_t s = 0; s < shippers; s++) {
     int max_cap;
     if (!(std::cin >> max_cap)) throw "failed to get a capacity value";
 
     // split shipper in two; the edge has the capacity
-    res.add_edge(shipper + shippers + prods + 2, shipper + prods + 2, max_cap);
+    res.add_edge(s + shippers + prods + 2, s + prods + 2, max_cap);
   }
 
   for (ssize_t connection = 0; connection < nconns; connection++) {
@@ -60,7 +60,7 @@ int graph::relabel(int u) noexcept // h[u] = 1 + min {h[v] : (u,v) ∈ Ef }
   node & node_u = _node_list[u];
 
   for ( auto & edge : node_u.edges() ) {
-    node & node_v = _node_list[ edge.second.dst() ];
+    node & node_v = _node_list[ edge.dst() ];
     if ( node_u.height() <= node_v.height() && (unsigned) node_v.height() < min_h )
       min_h = node_v.height();
   }
@@ -71,12 +71,14 @@ int graph::relabel(int u) noexcept // h[u] = 1 + min {h[v] : (u,v) ∈ Ef }
   return -1;
 }
 
-void graph::push(int u, int v, edge& e) noexcept
+void graph::push(int u, edge& e) noexcept
 {
   int df = std::min( _node_list[u].excess(), e.res_cap() );
-  e.push(df);
+
+  e.add_flow(df);
+
   _node_list[u].push(df);
-  _node_list[v].recv(df);
+  _node_list[e.dst()].recv(df);
 }
 
 void graph::initialize_preflow() noexcept
@@ -86,16 +88,12 @@ void graph::initialize_preflow() noexcept
   _node_list[source].relabel(V());
   //std::cerr << " == h[source] = " << V() << ";\n";
 
-  for ( auto & pair : _node_list[source].edges() ) {
-    edge & e = pair.second;
-    //std::cerr << " ==  cap (source, " << pair.first  << ") = "
-     // << e.cap() << '\n';
-    //std::cerr << " ==  flow(source, " << pair.first  << ") = "
-     // << e.flow() << '\n';
-    _node_list[source].push(e.cap());
-    //std::cerr << " === excess[source] = " << _node_list[source].excess() << '\n';
-    _node_list[e.dst()].recv(e.cap());
-    //std::cerr << " === excess[source] = " << _node_list[e.dst()].excess() << '\n';
+  // set iterators
+  for ( auto & n : _node_list ) n.current(n.edges().begin());
+
+  for ( auto & e : _node_list[source].edges() ) {
+    _node_list[source].recv(e.cap());
+    push(source, e);
   }
 
 }
@@ -103,19 +101,23 @@ void graph::initialize_preflow() noexcept
 void graph::discharge(int idx) noexcept
 {
   node & u = _node_list[idx];
-  auto edge_it  = u.edges().begin();
-  const auto end  = u.edges().end();
+  auto edge_it  = u.current();
+  std::cerr << &(*edge_it) << '\n';
+  int count = 0;
   while (u.excess() > 0) {
-    if (edge_it == end) {
+    if (edge_it == u.edges().end()) {
       relabel(idx);
       edge_it = u.edges().begin();
+      if (count++ > 2) exit(0);
       continue;
     }
 
-    edge & e = edge_it->second;
+    edge & e = *edge_it;
 
     std::cerr << " === edge(" << idx << ", " << e.dst()
-      << "); residual capacity = " << e.res_cap() << '\n';
+      << "); cap = " << e.cap()
+      << "; flow = " << e.flow()
+      << "; residual capacity = " << e.res_cap() << '\n';
 
     std::cerr << " === h[" << idx << "] = " << _node_list[idx].height() << '\n';
     std::cerr << " === e[" << idx << "] = " << _node_list[idx].excess() << '\n';
@@ -123,13 +125,15 @@ void graph::discharge(int idx) noexcept
     if (e.res_cap() > 0
         && u.height() == _node_list[e.dst()].height() + 1) {
       std::cerr << " === discharging from " << idx << " to " << e.dst() << "\n";
-      push(idx, e.dst(), e);
+      push(idx, e);
     }
     else {
       std::cerr << " === moving on\n";
       edge_it++;
     }
   }
+
+  u.current(edge_it);
 }
 
 void graph::relabel_to_front() noexcept

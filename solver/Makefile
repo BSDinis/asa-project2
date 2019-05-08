@@ -1,6 +1,6 @@
 CC := g++
 INCLUDES := -I. -I..
-CXXFLAGS := -O3 --std=c++11 -Wall -Werror -g -fdiagnostics-color=always $(INCLUDES)
+CXXFLAGS := --std=c++11 -Wall -Werror -g -fdiagnostics-color=always $(INCLUDES)
 LDFLAGS := -Wall -Werror -fdiagnostics-color=always $(INCLUDES) -L. -L..
 
 SOURCES=solver.cpp

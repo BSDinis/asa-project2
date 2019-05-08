@@ -17,65 +17,62 @@ using std::map;
 class graph {
   class edge {
     int _dst;
-    int _cap;
-    int _flow = 0;
-
-    edge * trans_edge;
+    int _cap, _flow;
+    edge * _back;
 
     public:
-    edge(int d, int c, edge* e) noexcept
-      : _dst(d), _cap(c), trans_edge(e) {}
+    edge(int d, int c) : _dst(d), _cap(c), _flow(0), _back(nullptr) {}
 
-    edge(int v, int cap) noexcept
-      : edge(v, cap, nullptr) {}
-
+    inline int  dst() const noexcept { return _dst; }
+    inline int  cap() const noexcept { return _cap; }
     inline int flow() const noexcept { return _flow; }
-    inline int cap() const noexcept  { return _cap; }
-    inline int dst() const noexcept  { return _dst; }
 
-    inline int res_cap() const noexcept
-    { return _cap - _flow; }
+    inline edge * back()  const noexcept { return _back; }
+    inline edge * set_back(edge *e) noexcept { return _back = e; }
 
-    inline bool connects_to(int v) const noexcept
-    { return _dst == v; }
+    inline int res_cap() const noexcept { return _cap - _flow; }
 
-
-    inline edge * transpose(edge * e) noexcept
-    { return trans_edge = e; }
-
-    inline void push(int df) noexcept {
+    inline void add_flow(int df) noexcept {
       _flow += df;
-      trans_edge->_flow -= df;
+      _back->sub_flow(df);
     }
 
-    inline constexpr bool operator<(const edge & rhs) const noexcept {
-      return dst() > rhs.dst();
+    inline void sub_flow(int df) noexcept {
+      _flow -= df;
     }
-
   };
 
   class node {
     int _excess = 0;
-    int _height = 0, _current = 0;
-    map<int, edge, std::greater<int>> _edges; // ordered in descending order
+    int _height = 0;
+    vector<edge> _edges;
+    vector<edge>::iterator _current;
 
     public:
-      inline edge * add(edge&& n_edge) noexcept {
-        auto p = _edges.emplace(n_edge.dst(), n_edge);
-        return &(p.first->second);
+      node() { _current = _edges.end(); }
+
+      inline void add(edge & n_edge) noexcept {
+        _edges.push_back(n_edge);
       }
 
-      inline const map<int, edge, std::greater<int>> & cedges() const noexcept {
+      inline void add_transpose_to_last(edge * e) noexcept {
+        _edges.back().set_back(e);
+      }
+
+      inline edge * last() noexcept {
+        return &_edges[_edges.size() - 1];
+      }
+
+      inline const vector<edge> & cedges() const noexcept {
         return _edges;
       }
 
-      inline map<int, edge, std::greater<int>> & edges() noexcept {
+      inline vector<edge> & edges() noexcept {
         return _edges;
       }
 
-      inline bool can_reach(int v) const noexcept {
-        return _edges.find(v) != _edges.end();
-      }
+      inline decltype(_current) current() noexcept { return _current; }
+      inline decltype(_current) current(decltype(_current) c) noexcept { return _current = c; }
 
       inline int excess() const noexcept { return _excess; }
       inline int height() const noexcept { return _height; }
@@ -85,18 +82,6 @@ class graph {
 
       inline int relabel(int new_height) noexcept
       { return _height = new_height ; }
-
-      inline int flow() const noexcept {
-          return std::accumulate(
-          _edges.cbegin(),
-          _edges.cend(),
-          0,
-          [](int &x,
-            const std::pair<int, edge> & y)
-          { return x + y.second.flow(); }
-          );
-      }
-
   };
 
   int _n_producers=0, _n_shippers=0;
@@ -110,13 +95,6 @@ class graph {
     }
     ~graph() = default; // needs to free edges;
 
-    inline bool has_link(const int u, const int v) const noexcept
-    {
-      if ( !(u < V() && v < V()) ) return false;
-      if (u == v) return true;
-      return _node_list[u].can_reach(v);
-    }
-
     bool add_edge_to_shipper(const int u, int v, const int w, const int n_prods, const int n_shippers) noexcept
     {
       if (v >= 2 + n_prods) v += n_shippers;
@@ -125,9 +103,12 @@ class graph {
 
     bool add_edge(const int u, const int v, const int w) noexcept
     {
-      auto e1 = _node_list[u].add(edge(v, w));
-      auto e2 = _node_list[v].add(edge(u, 0, e1));
-      e1->transpose(e2);
+      edge e1(v, w);
+      edge e2(u, 0);
+      _node_list[u].add(e1);
+      _node_list[v].add(e2);
+      _node_list[u].add_transpose_to_last(_node_list[v].last());
+      _node_list[v].add_transpose_to_last(_node_list[u].last());
       return true;
     }
 
@@ -140,14 +121,14 @@ class graph {
 
     inline int height(const int u) const noexcept { return _node_list[u].height(); }
 
-    void push(int u, int v, edge& edge) noexcept;
+    void push(int u, edge& edge) noexcept;
     int  relabel(int u) noexcept;
     void initialize_preflow() noexcept;
     void discharge(int u) noexcept;
     void relabel_to_front() noexcept;
 
     inline int  curr_flow() const noexcept {
-      return - _node_list[source].excess();
+      return _node_list[target].excess();
     }
 
 #if GRAPH_DEBUG
@@ -157,9 +138,9 @@ class graph {
       for (const auto & n : _node_list) {
         for (const auto & e : n.cedges()) {
           os << i << "\t|"
-            << e.second.dst()<< "\t|"
-            << e.second.cap() << "\t|"
-            << e.second.flow() << "\t|\n";
+            << e.dst()<< "\t|"
+            << e.cap() << "\t|"
+            << e.flow() << "\t|\n";
         }
         i++;
       }
