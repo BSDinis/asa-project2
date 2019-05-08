@@ -97,16 +97,13 @@ void graph::discharge(int idx) noexcept
   node & u = _node_list[idx];
   auto edge_it  = u.edges().begin();
   const auto end  = u.edges().end();
-  std::cerr << " ;excess: " << u.excess();
   while (u.excess() > 0) {
     edge & e = edge_it->second;
     if (edge_it == end) {
-      std::cerr << " ;rlbld: " << relabel(idx);
       edge_it = u.edges().begin();
     }
     else if (e.res_cap() > 0
         && u.height() == _node_list[e.dst()].height() + 1) {
-      std::cerr << " ;pushed to " << e.dst();
       push(idx, e.dst(), e);
     }
     else {
@@ -133,7 +130,6 @@ void graph::relabel_to_front() noexcept
     int old_h = height(u);
     std::cerr << "working on " << u << '[' << old_h << "]... ";
     discharge(u);
-    std::cerr << "; discharged\n";
     if (height(u) > old_h) {
       L.push_front(u);
       L.erase(it);
