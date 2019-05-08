@@ -13,7 +13,7 @@ class node {
   int _height   = 0;
 
   vector<edge *> _edges;
-  vec_it       _curr = _edges.end(); // hey
+  vec_it       _curr = _edges.end();
 
   inline int src_push(edge & e) noexcept {
     int df = e.cap();
