@@ -31,7 +31,6 @@ graph create_graph(std::istream &in)
     if (!(std::cin >> production_value)) throw "failed to get a producer value";
 
     // connect producer vertex to dummy sourse with the capacity of the production
-    //std::cerr << " edge " << producer + 2 << " --> " << 0 << '\n';
     res.add_edge(producer + 2, 0, production_value);
   }
 
@@ -40,8 +39,6 @@ graph create_graph(std::istream &in)
     if (!(std::cin >> max_cap)) throw "failed to get a capacity value";
 
     // split shipper in two; the edge has the capacity
-    //std::cerr << " edge " << s + shippers + prods + 2 << " --> "
-      //<< s + prods + 2 << '\n';
     res.add_edge(s + shippers + prods + 2, s + prods + 2, max_cap);
   }
 
@@ -55,7 +52,6 @@ graph create_graph(std::istream &in)
     if (cap < 1) throw "invalid capacity value";
 
     // inverted
-    //std::cerr << " edge " << dst << " --> " << src << '\n';
     res.add_edge_to_shipper(dst, src, cap, prods, shippers);
   }
 
@@ -77,30 +73,17 @@ void initialize_preflow(graph &g) noexcept
 void relabel_to_front(graph &g) noexcept
 {
   initialize_preflow(g);
-  //std::cerr << " = initialized preflow \n";
   std::list<int> L;
 
   ssize_t sz = g.V();
-  //std::cerr << " = L:";
   for (int i = sz - 1; i > 1; i--) {
     L.push_back(i);
-    //std::cerr << ' ' << i;
   }
-  //std::cerr << '\n';
 
   for (auto it=L.begin(); it != L.end(); ++it) {
     node & u = g.nodes()[*it];
     int old_h = u.height();
-    //std::cerr << " = working on " << *it
-      //<< "[h = " << u.height()
-      //<< "; e = " << u.overflow() <<"]\n";
-    //std::cerr << " == started discharge\n";
     u.discharge();
-    //std::cerr << " == finished discharge\n";
-    //std::cerr << " == " << *it
-      //<< "[h = " << u.height()
-      //<< "; e = " << u.overflow() <<"]\n";
-    //g.print(std::cerr);
     if (u.height() > old_h) {
       L.push_front(*it);
       L.erase(it);
@@ -135,10 +118,9 @@ vector<pair<int,int>> min_cut(graph &g) noexcept
         && nodes[i].height() >= nodes[source].height()
         && edge->dst()->height() < nodes[source].height() )
       {
-        // tem de se fazer id - n_shippers se id > 2+producers+shippers
-        int id = edge->dst()->id();
-        if (id >= 2 + g.n_producers() + g.n_shippers())
-          id -= g.n_shippers();
+        int id = (edge->dst()->id() >= 2 + g.n_producers() + g.n_shippers())
+          ? edge->dst()->id() - g.n_shippers()
+          : edge->dst()->id();
 
         ship_cut.emplace_back(id, i);
       }
