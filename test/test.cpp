@@ -2,13 +2,9 @@
 #include <iostream>
 
 int main() {
-  graph g;
-  try {
-    g = create_graph(std::cin);
-  }
-  catch (const char * str) {
-    std::cerr << "ERROR: " << str << '\n';
-  }
+  graph g = create_graph(std::cin);
+  for (auto &n : g.nodes())
+    n.reset();
   std::cout << g;
 
   return 0;

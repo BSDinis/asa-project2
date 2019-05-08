@@ -16,25 +16,33 @@ graph create_graph(std::istream &in)
 
 
   //  We want minimal cut closer to target so we need
-  //  to do Relable to Front of transposed graph
-  graph res(1 + 1 + prods + shippers * 2); // source + dest + producers + 2 * shipping
+  //  to do Relabel to Front of transposed graph
+  graph res(2 + prods + shippers * 2, 2 * (prods + shippers + nconns)); // source + dest + producers + 2 * shipping
   res.n_producers(prods);
   res.n_shippers(shippers);
+
+  int i=0;
+  for ( auto & node : res.nodes() ) {
+    node.id(i); i++;
+  }
 
   for (ssize_t producer = 0; producer < prods; producer++) {
     int production_value;
     if (!(std::cin >> production_value)) throw "failed to get a producer value";
 
     // connect producer vertex to dummy sourse with the capacity of the production
+    //std::cerr << " edge " << producer + 2 << " --> " << 0 << '\n';
     res.add_edge(producer + 2, 0, production_value);
   }
 
-  for (ssize_t shipper = 0; shipper < shippers; shipper++) {
+  for (ssize_t s = 0; s < shippers; s++) {
     int max_cap;
     if (!(std::cin >> max_cap)) throw "failed to get a capacity value";
 
     // split shipper in two; the edge has the capacity
-    res.add_edge(shipper * 2 + prods + 2, shipper + prods + 2, max_cap);
+    //std::cerr << " edge " << s + shippers + prods + 2 << " --> "
+      //<< s + prods + 2 << '\n';
+    res.add_edge(s + shippers + prods + 2, s + prods + 2, max_cap);
   }
 
   for (ssize_t connection = 0; connection < nconns; connection++) {
@@ -46,79 +54,97 @@ graph create_graph(std::istream &in)
     if (!(std::cin >> cap)) throw "failed to get capacity val";
     if (cap < 1) throw "invalid capacity value";
 
-    if ( dst > prods + 2 ) dst += shippers; // because of dummy station
-    res.add_edge(dst, src, cap);
+    // inverted
+    //std::cerr << " edge " << dst << " --> " << src << '\n';
+    res.add_edge_to_shipper(dst, src, cap, prods, shippers);
   }
 
   return res;
 }
 
-int graph::cf(struct edge& edge) noexcept // residual capacity
-{ return edge.capacity - edge.flow; }
-
-void graph::relable(int u) noexcept // h[u] = 1 + min {h[v] : (u,v) ∈ Ef }
+void initialize_preflow(graph &g) noexcept
 {
-  unsigned int min_h = (unsigned) -1;
-  for ( auto edge : _node_list[u].neighbours )
-    min_h = std::min(_node_list[edge.destination].height, min_h);
+  node & src = g.nodes()[source];
+  src.height(g.V());
 
-  if ( min_h != (unsigned) -1 )
-    _node_list[u].height = min_h + 1;
+  for ( auto & n : g.nodes() )
+    n.reset();
+
+  src.src_discharge();
 }
 
-void graph::push(int u, int v, struct edge& edge) noexcept
+
+void relabel_to_front(graph &g) noexcept
 {
-  int df = std::min( _node_list[u].excess, cf(edge) );
-  edge.flow += df;
-  edge.trans_edge->flow = -edge.flow;
-  _node_list[u].excess -= df;
-  _node_list[v].excess += df;
-}
-
-void graph::initialize_preflow() noexcept // all heights, excesses and flow already at 0
-{
-  _node_list[source].height = V();
-
-  for ( auto edge : _node_list[source].neighbours ) {
-    edge.flow = edge.capacity;
-    edge.trans_edge->flow = -edge.capacity;
-    _node_list[edge.destination].excess = edge.capacity;
-    _node_list[source].excess -= edge.capacity;
-  }
-
-}
-
-void graph::discharge(int u) noexcept
-{
-  struct node& node = _node_list[u];
-  while ( node.excess > 0 ) {
-    if ( node.current >= node.neighbours.size() ) {
-      relable(u);
-      node.current = 0;
-    } else if ( cf( node.neighbours[node.current] ) > 0
-              && node.height == _node_list[node.neighbours[node.current].destination].height + 1 )
-      push(u, node.neighbours[node.current].destination, node.neighbours[node.current]);
-
-    else node.current++;
-  }
-}
-
-void graph::relabel_to_front() noexcept
-{
-  initialize_preflow();
+  initialize_preflow(g);
+  //std::cerr << " = initialized preflow \n";
   std::list<int> L;
-  ssize_t sz = V();
-  for (int i = 2; i < sz; i++)
-    L.push_back(i);
 
-  for (std::list<int>::iterator it=L.begin() ; it != L.end(); ++it) {
-    int u = *it;
-    int old_h = height(u);
-    discharge(u);
-    if (height(u) > old_h) {
-      L.push_front(u);
+  ssize_t sz = g.V();
+  //std::cerr << " = L:";
+  for (int i = sz - 1; i > 1; i--) {
+    L.push_back(i);
+    //std::cerr << ' ' << i;
+  }
+  //std::cerr << '\n';
+
+  for (auto it=L.begin(); it != L.end(); ++it) {
+    node & u = g.nodes()[*it];
+    int old_h = u.height();
+    //std::cerr << " = working on " << *it
+      //<< "[h = " << u.height()
+      //<< "; e = " << u.overflow() <<"]\n";
+    //std::cerr << " == started discharge\n";
+    u.discharge();
+    //std::cerr << " == finished discharge\n";
+    //std::cerr << " == " << *it
+      //<< "[h = " << u.height()
+      //<< "; e = " << u.overflow() <<"]\n";
+    //g.print(std::cerr);
+    if (u.height() > old_h) {
+      L.push_front(*it);
       L.erase(it);
       it = L.begin();
     }
   }
+}
+
+vector<int> shippers_in_cut(graph &g) noexcept
+{
+  vector<int> ship_cut;
+  auto nodes = g.nodes();
+
+  for ( unsigned i= 2 + g.n_producers() + g.n_shippers(); i < nodes.size(); i++ ) {
+    if ( nodes[i].height() >= nodes[source].height()
+      && nodes[i-g.n_shippers()].height() < nodes[source].height() )
+      ship_cut.push_back(i-g.n_shippers());
+  }
+
+  return ship_cut;
+}
+
+vector<pair<int,int>> min_cut(graph &g) noexcept
+{
+  vector<pair<int,int>> ship_cut;
+  auto nodes = g.nodes();
+
+  for ( int i = 1; i < ((int) nodes.size()) - g.n_shippers() ; i++ ) {
+    for ( auto * edge : nodes[i].edges() ) {
+      if ( edge->cap() > 0
+        && edge->dst()->id() != target
+        && nodes[i].height() >= nodes[source].height()
+        && edge->dst()->height() < nodes[source].height() )
+      {
+        // tem de se fazer id - n_shippers se id > 2+producers+shippers
+        int id = edge->dst()->id();
+        if (id >= 2 + g.n_producers() + g.n_shippers())
+          id -= g.n_shippers();
+
+        ship_cut.emplace_back(id, i);
+      }
+    }
+  }
+
+  std::sort(ship_cut.begin(), ship_cut.end());
+  return ship_cut;
 }
