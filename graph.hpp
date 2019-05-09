@@ -41,14 +41,8 @@ class graph {
       _edge_list.emplace_back(&_node_list[u], &_node_list[v], cap);
       edge * out = &_edge_list.back();
 
-      _edge_list.emplace_back(&_node_list[v], &_node_list[u], 0);
-      edge * in  = &_edge_list.back();
-
-      out->set_back(in);
-      in->set_back(out);
-
       _node_list[u].add_edge(out);
-      _node_list[v].add_edge(in);
+      _node_list[v].add_edge(out);
       return true;
     }
 
@@ -76,9 +70,8 @@ class graph {
           << "] h = " << n.height()
           << "; e = " << n.overflow() << ";\n";
         for (const auto * e : n.cedges()) {
-          os << " |- " << (e->dst() - &(_node_list[0]))
-            << "[" << e << "] (" << e->back() << ") : "
-            << e->flow() << " / " << e->cap()
+          os << " |- " << (e->dst(n.id()) - &(_node_list[0]))
+            << e->flow(n.id()) << " / " << e->cap(n.id())
             << "\n";
         }
         os << '\n';

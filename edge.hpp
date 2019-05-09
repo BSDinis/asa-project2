@@ -1,5 +1,6 @@
 #pragma once
 #include <vector>
+#include "node.hpp"
 
 using std::vector;
 
@@ -17,21 +18,21 @@ class edge {
   edge(node * s, node *d, int c, edge * b = nullptr)
     : _src(s), _dst(d), _cap(c), _back(b) {}
 
-  inline node *dst() const noexcept { return _dst; }
-  inline int   cap() const noexcept { return _cap; }
-  inline int  flow() const noexcept { return _flow; }
-
-  inline edge * back()  const noexcept { return _back; }
-  inline edge * set_back(edge *e) noexcept { return _back = e; }
-
-  inline int res_cap() const noexcept { return _cap - _flow; }
-
-  inline void add_flow(int df) noexcept {
-    _flow += df;
-    _back->sub_flow(df);
+  inline node *dst(int id) const noexcept {
+    return _src->is_id(id) ? _dst : _src;
+  }
+  inline int cap(int id) const noexcept {
+    return _src->is_id(id) ? _cap : 0;
+  }
+  inline int flow(int id) const noexcept {
+    return _src->is_id(id) ? _flow : -_flow;
   }
 
-  inline void sub_flow(int df) noexcept {
-    _flow -= df;
+  inline int res_cap(int id) const noexcept {
+    return _src->is_id(id) ? _cap - _flow : _flow; // cap(id) - flow(id);
+  }
+
+  inline void add_flow(int id, int df) noexcept {
+    _src->is_id(id) ? _flow += df : _flow -=df;
   }
 };
