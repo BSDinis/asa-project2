@@ -1,0 +1,102 @@
+\documentclass[a4paper, 12pt, conference, portuguese]{ieeeconf}
+
+\IEEEoverridecommandlockouts
+\overrideIEEEmargins
+\usepackage{graphics}
+\usepackage{epsfig}
+\usepackage{mathptmx}
+\usepackage{times}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage[left=3cm,right=3cm,top=3cm,bottom=3cm]{geometry}
+\usepackage[utf8]{inputenc}
+\usepackage[portuguese]{babel}
+
+\title{{\LARGE \bf Corte Mínimo de Grafos Pesados\\}
+\large{Relatório do 2º Projecto - Análise e Síntese de Algoritmos} }
+
+\author{Baltasar Dinis, 89416 e Afonso Ribeiro, 86752}
+
+\newcommand\comment[1]{}
+
+\comment{
+  O relatório deverá ser entregue no formato PDF com não mais de 4 páginas, fonte de 12pt,
+  e 3cm de margem. O relatório deverá incluir uma introdução breve, a descrição da solução, a
+  análise teórica e a avaliação experimental dos resultados. O relatório deverá incluir qualquer
+  referência que tenha sido utilizada na realização do projecto. O texto do relatório deve ser
+  cuidado. Serão aplicados descontos por erros gramaticais ou erros ortográficos.
+}
+
+\begin{document}
+\maketitle
+\thispagestyle{empty}
+\pagestyle{empty}
+
+\begin{abstract}
+  Redes de distribuição devem ser desenhadas de forma a
+  suportar o tráfego a que são submetidas. No entanto, a
+  elevada densidade de interconexões entre os produtores,
+  centros de distribuição e o destino final torna a avaliação das
+  mesmas não óbvia. Neste relatório apresentamos uma solução
+  para este problema, permitindo avaliar a capacidade da rede e
+  que estações de abastecimento e ligações devem ser aumentadas
+  para aumentar essa mesma capacidade. Este trabalho foi
+  realizado no contexto da Unidade Curricular de Análise e Síntese
+  de Algoritmos, no ano lectivo de 2018-2019.
+\end{abstract}
+
+\section{INTRODUÇÃO}\label{intro}
+
+Consideramos que há $3$ categorias de vértices: 1) Os produtores,
+que têm um valor de produção $p_i$ associado; 2) As
+estações de abastecimento, com capacidade para tratar
+uma determinada quantidade de bens; 3) uma estação de destino.
+Adicionalmente, cada ligação entre vértices têm um valor máximo
+que conseguem suportar.
+
+O objetivo é calcular a capacidade da rede, e obter o fluxo
+máximo $F$ de mercadorias, dos produtores para a estação de
+destino. Se $F < \sum_i p_i$, então a rede não é adequada, sendo
+necessário aumentar a capacidade das estações de abastecimento,
+bem como a capacidade das ligações.
+
+O relatório está estruturado da seguinte forma: em \ref{sol} é
+apresentada a modelação do problema, o algoritmo e possíveis
+optimizações; em \ref{theoric} é feita uma análise da
+complexidade da solução; em \label{experimental} avalia-se
+experimentalmente a solução.
+
+\section{DESCRIÇÃO DA SOLUÇÃO}\label{sol}
+
+\subsection{Modelação do Problema}
+
+Representamos o problema com um grafo dirigido pesado, no qual
+calculamos o corte mínimo. Consideramos os produtores como
+vértices, existindo um nó fantasma, que funciona como fonte, que
+se liga aos mesmos. A aresta da fonte $s$ para o produtor $i$ tem
+peso $p_i$. Assim conseguimos simular o produtor. Cada estação de
+abastecimento expande-se em dois vértices, ligados com uma aresta
+cuja capacidade é a da estação. O sentido da aresta é dos produtores
+para o destino.
+
+\subsection{Cálculo do Corte Mínimo}
+\subsection{Optimizações}
+
+\section{ANÁLISE TEÓRICA}\label{theoric}
+
+\subsection{Representação do Grafo}
+\subsection{Construção do Grafo}
+\subsection{\textit{Push-Relabel}}
+\subsection{Avaliação}
+
+\section{AVALIAÇÃO EXPERIMENTAL}\label{experimental}
+
+\section{CONCLUSÃO}\label{conclusion}
+
+
+\begin{thebibliography}{99}
+  \bibitem{cormen} T. Cormen, C. Leiserson e L. R. Rivest, \textit{Introduction
+    to Algorithms} 1ª edição. Cambridge, Massachussets: The MIT Press,
+    1990.
+\end{thebibliography}
+\end{document}
