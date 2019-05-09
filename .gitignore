@@ -18,6 +18,7 @@
 
 # ignore test files
 student-tests
+submission
 
 # Prerequisites
 *.d
