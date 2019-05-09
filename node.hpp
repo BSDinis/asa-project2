@@ -28,7 +28,7 @@ class node {
 
   inline int  id()  const noexcept { return _idx; }
   inline void id(int idx) noexcept { _idx = idx; }
-  inline bool is_id(int id) { return _idx == id; }
+  bool is_id(int id) noexcept { return _idx == id; }
 
   inline int overflow() const noexcept { return _overflow; }
   inline int height()   const noexcept { return _height;   }

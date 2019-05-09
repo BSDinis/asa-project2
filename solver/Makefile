@@ -4,12 +4,15 @@ CXXFLAGS := -O3 --std=c++11 -Wall -Werror -g -fdiagnostics-color=always $(INCLUD
 LDFLAGS := -Wall -Werror -fdiagnostics-color=always $(INCLUDES) -L. -L..
 
 SOURCES=solver.cpp
-OBJECTS=$(SOURCES:.cpp=.o) ../graph.o
+OBJECTS=$(SOURCES:.cpp=.o) ../edge.o ../graph.o
 TARGET = solver
 
 .PHONY: all
 export GRAPH_DEBUG=1
 all: $(TARGET)
+
+../egde.o: ../edge.cpp
+../graph.o: ../edge.o ../graph.cpp
 
 $(TARGET): $(OBJECTS)
 
