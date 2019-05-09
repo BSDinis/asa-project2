@@ -1,6 +1,7 @@
 #pragma once
 
 #include <vector>
+#include <deque>
 #include <limits>
 #include "edge.hpp"
 
@@ -53,12 +54,14 @@ class node {
     return df;
   }
 
-  int src_discharge() noexcept {
-    int sum = 0;
-    for (auto * e : _edges)
-      sum += src_push(*e);
+  std::deque<int> src_discharge() noexcept {
+    std::deque<int> res;
+    for (auto * e : _edges) {
+      src_push(*e);
+      res.push_back(e->dst()->id());
+    }
 
-    return sum;
+    return res;
   }
 
   vector<int> discharge() noexcept {

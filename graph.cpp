@@ -60,7 +60,7 @@ graph create_graph(std::istream &in)
   return res;
 }
 
-void initialize_preflow(graph &g) noexcept
+std::deque<int> initialize_preflow(graph &g) noexcept
 {
   node & src = g.nodes()[source];
   src.height(g.V());
@@ -68,17 +68,13 @@ void initialize_preflow(graph &g) noexcept
   for ( auto & n : g.nodes() )
     n.reset();
 
-  src.src_discharge();
+  return src.src_discharge();
 }
 
 
 void relabel_to_front(graph &g) noexcept
 {
-  initialize_preflow(g);
-  std::deque<int> actives;
-  for ( int id = g.V() - 1 ; id > 1; id-- )
-    if (g.nodes()[id].overflow() > 0)
-      actives.push_back(id);
+  std::deque<int> actives = initialize_preflow(g);
 
   while (!actives.empty()) {
     int id = actives.front();

@@ -1,6 +1,7 @@
 #pragma once
 
 #include <vector>
+#include <deque>
 #include <iostream>
 #include <utility>
 #include <numeric>
@@ -89,7 +90,7 @@ class graph {
 };
 
 graph create_graph(std::istream &in) ;
-void initialize_preflow(graph & g) noexcept;
+std::deque<int> initialize_preflow(graph & g) noexcept;
 void relabel_to_front(graph & g) noexcept;
 vector<int> shippers_in_cut(graph & g) noexcept;
 vector<pair<int,int>> min_cut(graph &g) noexcept;
