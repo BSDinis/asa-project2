@@ -1,7 +1,7 @@
 #pragma once
 
 #include <vector>
-#include <deque>
+#include <queue>
 #include <limits>
 #include "edge.hpp"
 
@@ -55,11 +55,11 @@ class node {
     return df;
   }
 
-  std::deque<int> src_discharge() noexcept {
-    std::deque<int> res;
+  std::queue<int> src_discharge() noexcept {
+    std::queue<int> res;
     for (auto * e : _edges) {
       src_push(*e);
-      res.push_back(e->dst(_idx)->id());
+      res.push(e->dst(_idx)->id());
     }
 
     return res;

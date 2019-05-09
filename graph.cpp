@@ -1,7 +1,7 @@
 #include "graph.hpp"
 
 #include <list>
-#include <deque>
+#include <queue>
 #include <algorithm>
 
 graph create_graph(std::istream &in)
@@ -60,7 +60,7 @@ graph create_graph(std::istream &in)
   return res;
 }
 
-std::deque<int> initialize_preflow(graph &g) noexcept
+std::queue<int> initialize_preflow(graph &g) noexcept
 {
   node & src = g.nodes()[source];
   src.height(g.V());
@@ -74,13 +74,13 @@ std::deque<int> initialize_preflow(graph &g) noexcept
 
 void relabel_to_front(graph &g) noexcept
 {
-  std::deque<int> actives = initialize_preflow(g);
+  std::queue<int> actives = initialize_preflow(g);
 
   while (!actives.empty()) {
     int id = actives.front();
-    actives.pop_front();
+    actives.pop();
     for ( const auto & idx : g.nodes()[id].discharge() ) {
-      actives.push_back(idx);
+      actives.push(idx);
     }
   }
 }

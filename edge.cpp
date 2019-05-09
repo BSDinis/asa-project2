@@ -12,7 +12,7 @@ int edge::flow(int id) const noexcept {
 }
 
 int edge::res_cap(int id) const noexcept {
-  return _src->is_id(id) ? _cap - _flow : _flow; // cap(id) - flow(id);
+  return _src->is_id(id) ? _cap - _flow : _flow;
 }
 
 void edge::add_flow(int id, int df) noexcept {

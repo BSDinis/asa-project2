@@ -10,13 +10,11 @@ class edge {
   node * _dst;
   int _cap;
   int _flow = 0;
-  edge * _back;
-
 
   public:
-  edge() : edge(nullptr, nullptr, 0, nullptr) {}
-  edge(node * s, node *d, int c, edge * b = nullptr)
-    : _src(s), _dst(d), _cap(c), _back(b) {}
+  edge() : edge(nullptr, nullptr, 0) {}
+  edge(node * s, node *d, int c)
+    : _src(s), _dst(d), _cap(c) {}
 
   node *dst(int id) const noexcept ;
   int cap(int id) const noexcept ;
