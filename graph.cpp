@@ -19,7 +19,7 @@ graph create_graph(std::istream &in)
 
   //  We want minimal cut closer to target so we need
   //  to do Relabel to Front of transposed graph
-  graph res(2 + prods + shippers * 2, 2 * (prods + shippers + nconns)); // source + dest + producers + 2 * shipping
+  graph res(2 + prods + shippers * 2, prods + shippers + nconns); // source + dest + producers + 2 * shipping
   res.n_producers(prods);
   res.n_shippers(shippers);
 
@@ -106,14 +106,14 @@ vector<pair<int,int>> min_cut(graph &g) noexcept
 
   for ( int i = 1; i < ((int) nodes.size()) - g.n_shippers() ; i++ ) {
     for ( auto * edge : nodes[i].edges() ) {
-      if ( edge->cap() > 0
-        && edge->dst()->id() != target
+      if ( edge->cap(i) > 0
+        && edge->dst(i)->id() != target
         && nodes[i].height() >= nodes[source].height()
-        && edge->dst()->height() < nodes[source].height() )
+        && edge->dst(i)->height() < nodes[source].height() )
       {
-        int id = (edge->dst()->id() >= 2 + g.n_producers() + g.n_shippers())
-          ? edge->dst()->id() - g.n_shippers()
-          : edge->dst()->id();
+        int id = (edge->dst(i)->id() >= 2 + g.n_producers() + g.n_shippers())
+          ? edge->dst(i)->id() - g.n_shippers()
+          : edge->dst(i)->id();
 
         ship_cut.emplace_back(id, i);
       }

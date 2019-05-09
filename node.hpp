@@ -14,13 +14,13 @@ class node {
   int _height   = 0;
 
   vector<edge *> _edges;
-  vec_it       _curr = _edges.end();
+  vec_it _curr = _edges.end();
 
   inline int src_push(edge & e) noexcept {
-    int df = e.cap();
+    int df = e.cap(_idx);
     _overflow -= df;
-    e.add_flow(df);
-    e.dst()->recv(df);
+    e.add_flow(_idx, df);
+    e.dst(_idx)->recv(df);
     return df;
   }
 
@@ -28,6 +28,7 @@ class node {
 
   inline int  id()  const noexcept { return _idx; }
   inline void id(int idx) noexcept { _idx = idx; }
+  bool is_id(int id) noexcept { return _idx == id; }
 
   inline int overflow() const noexcept { return _overflow; }
   inline int height()   const noexcept { return _height;   }
@@ -36,8 +37,8 @@ class node {
   int relabel() noexcept {
     int min_height(std::numeric_limits<int>::max());
     for (const auto * e : _edges) {
-      if (e->dst()->height() >= _height)
-        min_height = std::min(min_height, e->dst()->height());
+      if (e->dst(_idx)->height() >= _height)
+        min_height = std::min(min_height, e->dst(_idx)->height());
     }
 
     return _height = min_height + 1;
@@ -47,10 +48,10 @@ class node {
   inline int recv(int df) noexcept { return _overflow += df; }
 
   inline int push(edge & e) noexcept {
-    int df = std::min(e.res_cap(), _overflow);
+    int df = std::min(e.res_cap(_idx), _overflow);
     _overflow -= df;
-    e.add_flow(df);
-    e.dst()->recv(df);
+    e.add_flow(_idx, df);
+    e.dst(_idx)->recv(df);
     return df;
   }
 
@@ -58,7 +59,7 @@ class node {
     std::deque<int> res;
     for (auto * e : _edges) {
       src_push(*e);
-      res.push_back(e->dst()->id());
+      res.push_back(e->dst(_idx)->id());
     }
 
     return res;
@@ -75,11 +76,11 @@ class node {
       }
 
       edge & e = **it;
-      if (e.res_cap() > 0 && _height == e.dst()->height() + 1) {
-        bool inactive = e.dst()->overflow() == 0;
+      if (e.res_cap(_idx) > 0 && _height == e.dst(_idx)->height() + 1) {
+        bool inactive = e.dst(_idx)->overflow() == 0;
         push(e);
-        if (inactive && e.dst()->id() > 1)
-          new_actives.push_back(e.dst()->id());
+        if (inactive && e.dst(_idx)->id() > 1)
+          new_actives.push_back(e.dst(_idx)->id());
       }
       else {
         it++;
