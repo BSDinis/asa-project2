@@ -1,5 +1,7 @@
 #include "graph.hpp"
+
 #include <list>
+#include <deque>
 #include <algorithm>
 
 graph create_graph(std::istream &in)
@@ -73,21 +75,16 @@ void initialize_preflow(graph &g) noexcept
 void relabel_to_front(graph &g) noexcept
 {
   initialize_preflow(g);
-  std::list<int> L;
+  std::deque<int> actives;
+  for ( int id = g.V() - 1 ; id > 1; id-- )
+    if (g.nodes()[id].overflow() > 0)
+      actives.push_back(id);
 
-  ssize_t sz = g.V();
-  for (int i = sz - 1; i > 1; i--) {
-    L.push_back(i);
-  }
-
-  for (auto it=L.begin(); it != L.end(); ++it) {
-    node & u = g.nodes()[*it];
-    int old_h = u.height();
-    u.discharge();
-    if (u.height() > old_h) {
-      L.push_front(*it);
-      L.erase(it);
-      it = L.begin();
+  while (!actives.empty()) {
+    int id = actives.front();
+    actives.pop_front();
+    for ( const auto & idx : g.nodes()[id].discharge() ) {
+      actives.push_back(idx);
     }
   }
 }

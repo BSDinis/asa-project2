@@ -61,8 +61,9 @@ class node {
     return sum;
   }
 
-  void discharge() noexcept {
+  vector<int> discharge() noexcept {
     auto it = _curr;
+    vector<int> new_actives;
     while (_overflow > 0) {
       if (it == _edges.end()) {
         relabel();
@@ -72,7 +73,10 @@ class node {
 
       edge & e = **it;
       if (e.res_cap() > 0 && _height == e.dst()->height() + 1) {
+        bool inactive = e.dst()->overflow() == 0;
         push(e);
+        if (inactive && e.dst()->id() > 1)
+          new_actives.push_back(e.dst()->id());
       }
       else {
         it++;
@@ -80,6 +84,7 @@ class node {
     }
 
     _curr = it;
+    return new_actives;
   }
 
   inline void add_edge(edge *out) noexcept { _edges.push_back(out); }
