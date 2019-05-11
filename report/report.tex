@@ -87,15 +87,26 @@ pesos mantêm-se).
 
 \subsection{Cálculo do Corte Mínimo}
 Calculamos o corte mínimos de acordo com o método
-\textit{Push-Relabel}.
+\textit{Push-Relabel}\cite{pre-flow}, escolhendo os vértices com
+uma \textit{FIFO}. Saturamos as arestas que
+partem da fonte e, enquanto os vértices estiverem ativos, é
+aplicada a operação de \textit{discharge}.
+
+Um vértice está ativo se tem excesso, sendo que quando lhe é
+inserido excesso (através de uma operação de \textit{push}), é adicionado
+a uma fila. A operação de \textit{discharge}, feita a partir do vértice
+no topo da fila. Envia todo o fluxo que consegue para os nós que
+têm a altura uma unidade mais baixa da sua. Se, depois de fazer
+isto, continua com excesso, é feita uma operação de
+\textit{relabel}, que aumenta a sua altura.
+
 \subsection{Optimizações}
 
-\section{ANÁLISE TEÓRICA}\label{theoric}
+Há diversas optimizações que podem ser aplicadas, apresentamos
+aqui algumas.
 
-\subsection{Representação do Grafo}
-\subsection{Construção do Grafo}
-\subsection{\textit{Push-Relabel}}
-\subsection{Avaliação}
+Na inicialização pode ser feita uma procura em lar
+no início, uma procura em largura. Isto permite que
 
 \section{AVALIAÇÃO EXPERIMENTAL}\label{experimental}
 
@@ -106,5 +117,8 @@ Calculamos o corte mínimos de acordo com o método
   \bibitem{cormen} T. Cormen, C. Leiserson e L. R. Rivest, \textit{Introduction
     to Algorithms} 1ª edição. Cambridge, Massachussets: The MIT Press,
     1990.
+  \bibitem{pre-flow}  A V Goldberg and R E Tarjan. 1986.
+    ``A new approach to the maximum flow problem.''
+    In Proceedings of the eighteenth annual ACM symposium on Theory of computing (STOC '86). ACM
 \end{thebibliography}
 \end{document}
