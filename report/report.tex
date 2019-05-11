@@ -72,7 +72,7 @@ bem como a capacidade das ligações.
 
 O relatório está estruturado da seguinte forma: em \ref{sol} é
 apresentada a modelação do problema, o algoritmo e possíveis
-ptimizações; em \ref{theoric} é feita uma análise da
+optimizações; em \ref{theoric} é feita uma análise da
 complexidade da solução; em \label{experimental} avalia-se
 experimentalmente a solução.
 
@@ -92,8 +92,8 @@ para o destino.
 Todas as ligações que precisam de ser aumentadas traduzem-se em arestas
 saturadas(pois limitam o fluxo). Só procuramos as estações e
 caminhos a aumentar mais próximas do sumidouro, precisamos de calcular
-o corte minimo mais próximo do mesmo. Como pretendos fazê-lo a partir
-das alturas obtidas pelo algoritmo Push Relabel que da o corte minimo
+o corte mínimo mais próximo do mesmo. Como pretendos fazê-lo a partir
+das alturas obtidas pelo algoritmo Push Relabel que da o corte mínimo
 mais próximo da fonte, è preciso executá-lo na rede transposta.
 
 \subsection{Cálculo do Corte Mínimo}
@@ -216,7 +216,7 @@ varia cubicamente com o
 número de vértices do grafo. Concluímos assim que estamos de
 acordo com o resultado teórico.
 
-Note-se que no ínicio, a curva parece constante. Isto deve-se ao
+Note-se que no início, a curva parece constante. Isto deve-se ao
 facto de a própria construção do grafo ser pesada (devido à
 densidade e ao recurso à unidade de gestão de memória).
 Adicionalmente, os espaços entre os pontos deve-se à duplicação
