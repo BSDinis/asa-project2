@@ -89,11 +89,12 @@ abastecimento expande-se em dois vértices, ligados com uma aresta
 cuja capacidade é a da estação. O sentido da aresta é dos produtores
 para o destino.
 
-TODO: explicar porque é que o aumento se encontra no corte.
-
-Como procuramos as estações e caminhos a aumentar mais próximas
-do sumidouro, calculamos o corte mínimo no grafo transposto (os
-pesos mantêm-se).
+Todas as ligações que precisam de ser aumentadas traduzem-se em arestas
+saturadas(pois limitam o fluxo). Só procuramos as estações e
+caminhos a aumentar mais próximas do sumidouro, precisamos de calcular
+o corte minimo mais próximo do mesmo. Como pretendos fazê-lo a partir
+das alturas obtidas pelo algoritmo Push Relabel que da o corte minimo
+mais próximo da fonte, è preciso executá-lo na rede transposta.
 
 \subsection{Cálculo do Corte Mínimo}
 Calculamos o corte mínimos de acordo com o método
