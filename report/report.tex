@@ -7,11 +7,13 @@
 \usepackage{mathptmx}
 \usepackage{times}
 \usepackage{amsmath}
+\usepackage{amsthm}
 \usepackage{amssymb}
 \usepackage[left=3cm,right=3cm,top=3cm,bottom=3cm]{geometry}
 \usepackage[utf8]{inputenc}
 \usepackage[portuguese]{babel}
 
+\usepackage{alltt}
 \title{{\LARGE \bf Corte Mínimo de Grafos Pesados\\}
 \large{Relatório do 2º Projecto - Análise e Síntese de Algoritmos} }
 
@@ -28,6 +30,14 @@
 }
 
 \begin{document}
+\newtheorem{theorem}{Teorema}
+\theoremstyle{definition}
+\newtheorem{axiom}{Axioma}[section]
+\newtheorem{corollary}{Corolário}
+\newtheorem{lemma}{Lema}
+\newtheorem{defin}{Definição}
+\newtheorem*{dem}{Demonstração}
+
 \maketitle
 \thispagestyle{empty}
 \pagestyle{empty}
@@ -62,7 +72,7 @@ bem como a capacidade das ligações.
 
 O relatório está estruturado da seguinte forma: em \ref{sol} é
 apresentada a modelação do problema, o algoritmo e possíveis
-optimizações; em \ref{theoric} é feita uma análise da
+ptimizações; em \ref{theoric} é feita uma análise da
 complexidade da solução; em \label{experimental} avalia-se
 experimentalmente a solução.
 
@@ -103,11 +113,89 @@ isto, continua com excesso, é feita uma operação de
 \subsection{Optimizações}
 
 Há diversas optimizações que podem ser aplicadas, apresentamos
-aqui algumas.
+aqui algumas: 1) inicialização de alturas mínimas; 2) cálculo
+periódico de alturas mínimas; 3) heurística de espaços .
+O objetivo é comum: diminuir o número de operações relabel desnecessárias.
 
-Na inicialização pode ser feita uma procura em lar
-no início, uma procura em largura. Isto permite que
+Na inicialização pode ser feita uma procura em largura
+a partir do sumidouro no grafo transposto. Isto permite que se inicialize
+as alturas com as distâncias da procura, porque o fluxo tem de
+chegar à fonte, e para tal acontecer os nós de um nível da árvore
+de procura têm de estar mais baixos que os do nível abaixo
+(porque estão no caminho mais curto).
 
+Pode ser refeita esta procura em profundidade, novamente a partir
+do sumidouro, mas desta vez no transposto do grafo residual, para recalcular as
+alturas mínimas necessárias. Como a procura em
+profundidade é $O(V + E)$, esta optimização seria feita com
+regularidade, mas não em demasia. O valor óptimo pode ser
+ajustado experimentalmente.
+
+A terceira optimização é a heurística de espaços. Quando há um
+espaço nas alturas dos vértices --- um valor $g < \mid V \mid:
+\nexists u \in V : h[u] = g$ --- então podemos elevar todos os
+elementos com altura superior ao espaço para $\mid V \mid + 1$,
+pois estes vértices não conseguem  atingir o
+sumidouro.\cite{goldberg}
+
+Na nossa implementação, optámos por não empregar estas
+heurísticas, pois não sentimos que fosse necessário e verificamos
+que a criação do grafo era um problema maior para a performance,
+devido ao uso da unidade de gestão de memória.
+
+Há outras formas de calcular o fluxo máximo, que potencialmente seriam mais óptimas ---
+nomeadamente utilizando a estrutura de árvores dinâmicas
+descrita em \cite{pre-flow}, que não consideramos para a
+implementação, em nome de evitar optimizações prematuras.
+
+\section{ANÁLISE TEÓRICA}\label{theoric}
+
+Nesta secção fazemos uma breve análise da complexidade do
+algoritmo. Assumimos que o leitor está familiarizado com as
+operações de \textit{push} e \textit{relabel}, descritas em
+\cite{pre-flow}.
+
+\begin{defin} [Push não-saturante]
+  Um push diz-se não saturante quando não satura a aresta.
+\end{defin}
+
+\begin{lemma} Uma operação de discharge tem no máximo um push não
+  saturante. A prova é óbvia: se é feito um push não saturante
+  não há mais excesso no vértice para enviar pela areta.
+\end{lemma}
+
+\begin{defin} [Passagem]
+  Operações de discharge aplicadas nos vértices adicionados na
+  passagem anterior.
+\end{defin}
+
+\begin{lemma}
+  Uma passagem custa $O(V)$, pois é feito no máximo um push não
+  saturante por vértice durante a mesma.
+\end{lemma}
+
+\begin{lemma} São feitas $4n^2$ passagens na fila \end{lemma}
+
+\begin{dem}
+  Seja $H$ a altura máxima dos vértices na fila. Quando é feita
+  uma passagem podem acontecer $3$ coisas: 1) $H$
+  decresce, o que significa que um nó com altura máxima saiu da
+  fila; 2) $H$ mantém-se, o que significa que pelo menos um
+  vértice (que tinha $h < H$) aumentou de altura; 3) $H$ aumenta,
+  o que significa que um vértice aumentou de altura, tal que
+  $\Delta h[v] \geq \Delta H$. Como a altura máxima dos vértices
+  é de $2 \mid V \mid < 1$, então as passagens onde $H$ aumenta
+  ou mantém-se são $O(V^2)$ (cada vértice só pode aumentar $O(V)$
+  vezes). Como $H_0 = 0$ e $H_f = 0$, então as passagens onde $H$
+  diminui são também $O(V^2)$.
+\end{dem}
+
+\begin{theorem}
+  O algoritmo tem complexidade $O(V^3)$.
+\end{theorem}
+\begin{dem}
+  Corolário dos Lemas 2 e 3.
+\end{dem}
 \section{AVALIAÇÃO EXPERIMENTAL}\label{experimental}
 
 \section{CONCLUSÃO}\label{conclusion}
@@ -120,5 +208,11 @@ no início, uma procura em largura. Isto permite que
   \bibitem{pre-flow}  A V Goldberg and R E Tarjan. 1986.
     ``A new approach to the maximum flow problem.''
     In Proceedings of the eighteenth annual ACM symposium on Theory of computing (STOC '86). ACM
+  \bibitem{goldberg} B V Cherkassky and A V Goldberg. 1994.
+    ``On implementing the push-relabel method for the maximum
+    flow problem.'' Integer Programming and Combinatorial
+    Optimization. IPCO
 \end{thebibliography}
+
+
 \end{document}
