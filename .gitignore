@@ -19,6 +19,10 @@
 # ignore test files
 student-tests
 
+#
+*.aux
+*.log
+
 # Prerequisites
 *.d
 
