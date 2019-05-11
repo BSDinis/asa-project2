@@ -199,13 +199,46 @@ operações de \textit{push} e \textit{relabel}, descritas em
 \end{dem}
 \section{AVALIAÇÃO EXPERIMENTAL}\label{experimental}
 
+Geramos testes tendo em conta o número de vértices que gerariam
+(pois é a variável que dita a complexidade do algoritmo).
+\begin{figure}[t]
+  \centering
+  \includegraphics[width=1.0\linewidth]{../data/res.pdf}
+  \caption{Resultados experimentais: Latência em função do número
+    de vértices}
+\end{figure}
+
+Na Figura 1 está exposta a relação entre o número de
+vértices e a complexidade temporal . O polinómio de regressão
+encontrado é cúbico tem um coeficiente de determinação $R^2 =
+0.9473$, pelo que concluímos que o desempenho da nossa solução
+varia cubicamente com o
+número de vértices do grafo. Concluímos assim que estamos de
+acordo com o resultado teórico.
+
+Note-se que no ínicio, a curva parece constante. Isto deve-se ao
+facto de a própria construção do grafo ser pesada (devido à
+densidade e ao recurso à unidade de gestão de memória).
+Adicionalmente, os espaços entre os pontos deve-se à duplicação
+de arestas, o que dificultou a geração de um conjunto de dados
+que variasse linearmente no número de vértices.
+
+Gostaríamos de ter gerado mais pontos, mas o facto do
+algoritmo ser cúbico dificultou isso mesmo.
+
+Os testes foram efectuados numa arquitectura Intel$^\circledR$ Core\texttrademark
+i5-6200U.
+
+
 \section{CONCLUSÃO}\label{conclusion}
+
+Exposemos, analisamos e avaliamos experimentalmente uma solução
+ao problema proposto, mapeando-o para um problema de grafos onde
+calculamos o fluxo máximo de acordo com um algoritmo
+\textit{push-relabel}, de complexidade $O(V^3)$.
 
 
 \begin{thebibliography}{99}
-  \bibitem{cormen} T. Cormen, C. Leiserson e L. R. Rivest, \textit{Introduction
-    to Algorithms} 1ª edição. Cambridge, Massachussets: The MIT Press,
-    1990.
   \bibitem{pre-flow}  A V Goldberg and R E Tarjan. 1986.
     ``A new approach to the maximum flow problem.''
     In Proceedings of the eighteenth annual ACM symposium on Theory of computing (STOC '86). ACM
